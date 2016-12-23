@@ -1,0 +1,22 @@
+{
+  "name": "csmng-react",
+  "version": "1.0.0",
+  "description": "csmng",
+  "main": "index.js",
+  "dependencies": {
+    "react": "latest",
+    "whatwg-fetch": "^2.0.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.14.0",
+    "babel-loader": "^6.2.5",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-react": "^6.11.1",
+    "webpack": "^1.13.2"
+  },
+  "scripts": {
+    "start": "webpack"
+  },
+  "author": "",
+  "license": "ISC"
+}

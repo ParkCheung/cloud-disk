@@ -1,0 +1,662 @@
+
+.list_td {
+    padding-left: 5px;
+    padding-right: 5px;
+    vertical-align: middle;
+    height: 30px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: center;
+}
+
+.list_td_name {
+    padding-left: 5px;
+    padding-right: 5px;
+    vertical-align: middle;
+    height: 30px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.com_toolbar {
+    height: 40px;
+    background-color: #f2f2f2;
+    font: 15px "Microsoft YaHei", STXihei, sans-serif;
+    line-height: 40px;
+    color: #fff;
+    position: relative;
+    /*text-overflow: ellipsis;*/
+}
+
+.com_toolbar label {
+    height: 20px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.com_toolbar a {
+    color: #333333;
+
+}
+
+.com_toolbar img {
+    vertical-align: middle;
+
+}
+
+.com_toolbar .separator {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.com_toolbar .icon {
+    padding-right: 3px;
+}
+
+.com_toolbar .big_icon {
+    padding-right: 3px;
+    height: 22px;
+}
+
+.content_container {
+    padding-bottom: 90px;
+    margin: 40px auto;
+    width: 1000px;
+    height: 700px;
+    min-height: 780px;
+}
+
+.content_path {
+    color: #ffffff;
+}
+
+.com_mode {
+    height: 40px;
+    font-size: 14px;
+    line-height: 40px;
+    position: relative;
+}
+
+.com_mode .wrap {
+    margin: 0 auto;
+    width: 1000px;
+    text-align: right;
+    vertical-align: middle;
+}
+
+.com_mode img {
+    vertical-align: middle;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.com_mode label {
+    width: 90%;
+    text-align: center;
+    float: left;
+}
+
+.list_mode_div {
+
+    font: 12px/1.5 "Microsoft YaHei", STXihei, sans-serif;
+    height: auto;
+
+}
+
+.list_mode_div table {
+    width: 100%;
+
+}
+
+.list_mode_div tr {
+    height: 40px;
+}
+
+.list_mode_div td {
+    border: 1px solid #dbe6f1;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.list_mode_div .page_choose {
+    background-color: #c5f2c9;
+    height: 40px;
+}
+
+.list_mode_div .page_choose a {
+    vertical-align: middle;
+    height: 100%;
+    border-left: 1px solid #d6d6d6;
+    display: inline-block;
+    position: relative;
+    padding: 0 26px;
+    color: #1e447a;
+    cursor: pointer;
+}
+
+.list_mode_div .checkbox {
+    border-right: 0;
+    margin-right: 10px;
+}
+
+.list_mode_div .checkbox-scope {
+    border-right: 0;
+    margin-right: 10px;
+}
+
+.list_mode_div .dentry_label {
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.list_dentry_name {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    float: left;
+}
+
+.list_link {
+    padding-top: 8px
+}
+
+.page_button {
+    width: 100px;
+    height: 40px;
+    float: right;
+    padding-top: 15px
+}
+
+.page_div {
+    height: 50px;
+    background-color: #dbe6f1
+}
+#norecord_div{
+    height: 300px;
+}
+
+#norecord_div img{
+    padding-left: 410px;padding-top: 100px
+}
+
+#norecord_div p{
+    width: 100%;text-align: center;font-size:14px;padding-top: 20px
+}
+
+.thumbnail_mode_div {
+    font: 12px "Microsoft YaHei", STXihei, sans-serif;
+    display: none;
+    height: 656px;
+}
+
+.thumbnail_mode_div li {
+    float: left;
+    width: 80px;
+    height: 100px;
+    list-style: none;
+    padding: 20px;
+    margin: 5px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    text-align: center;
+
+}
+
+.thumbnail_mode_div li:hover {
+    border: 1px solid #b3bcc2;
+    background-color: #eff8fe;
+    cursor: pointer;
+}
+
+.thumbnail_mode_div .image {
+    width: 80px;
+    cursor: pointer;
+}
+
+.thumbnail_mode_div .choosed {
+    background-color: #eff8fe;
+    border: 1px solid #b3bcc2;
+}
+
+.thumbnail_mode_div .unchoosed {
+    background-color: transparent;
+    border: 1px solid transparent;
+}
+
+.my_dialog {
+    font: 14px "Microsoft YaHei", STXihei, sans-serif;
+    width: 360px;
+    height: 200px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -180px;
+    margin-top: -125px;
+}
+
+.my_dialog h5 {
+    color: #999999;
+    margin: 7px;
+
+}
+
+.my_dialog .dg_content {
+    height: 50px;
+    padding: 10px;
+}
+
+.dg_button {
+    padding-top: 15px;
+    vertical-align: middle;
+    text-align: center;
+    height: 20px;
+    width: 100%;
+}
+
+.btn_dialog {
+    padding: 5px 15px 5px 15px;
+    margin-top: 7px;
+    margin-right: 20px;
+    height: 30px;
+    text-align: center;
+
+}
+
+.btn_link {
+    padding: 5px 15px 5px 15px;
+    margin-top: 15px;
+    height: 22px;
+    vertical-align: middle;
+    text-align: center;
+    width: 60px;
+    float: right;
+    margin-right: 10px;
+
+}
+
+.btn_float_right {
+    padding: 5px 15px 5px 15px;
+    margin-top: 7px;
+    margin-right: 10px;
+    float: right;
+    text-align: center;
+}
+
+.my_dialog .dg_container {
+    text-align: center;
+    font-size: 14px;
+    height: 100%;
+
+}
+
+/*控制按钮style*/
+.available {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.unavailable {
+    opacity: 0.5;
+    cursor: default;
+    pointer-events: none;
+}
+
+.function_dialog {
+    font: 15px "Microsoft YaHei", STXihei, sans-serif;
+    width: 500px;
+    height: 400px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -250px;
+    margin-top: -150px;
+}
+
+.function_container {
+    background-color: #ffffff;
+    height: 100%;
+}
+
+.function_container h5 {
+    color: #999999;
+    padding: 15px;
+    position: relative;
+    float: left;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.function_dialog .function_tool {
+    height: 50px;
+    vertical-align: middle;
+
+}
+
+.function_dialog .function_table {
+    font: 12px/1.5 "Microsoft YaHei", STXihei, sans-serif;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.function_table .table_tile {
+    font: 14px "Microsoft YaHei", STXihei, sans-serif;
+    height: 30px;
+    border-top: 1px solid #DBE6F1;
+    border-bottom: 1px solid #DBE6F1;
+}
+
+.function_table .uplad_td {
+    padding-left: 5px;
+    overflow: hidden;
+    vertical-align: middle;
+}
+
+.function_table .uplad_td image {
+    height: 24px;
+    width: 24px;
+    float: right;
+    margin-right: 10px;
+    color: #000000;
+}
+
+#dentry_tree {
+    overflow-y: auto;
+    width: 100%;
+    height: 300px;
+    padding-left: 20px;
+
+}
+
+#recycle_list {
+    overflow-y: auto;
+    height: 550px;
+}
+
+.recycle_dialog {
+    font: 12px "Microsoft YaHei", STXihei, sans-serif;
+    margin-top: -360px;
+    width: 600px;
+    height: 670px;
+    margin-left: -300px;
+}
+
+.dentry_label {
+    height: 50px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.table_tile {
+    font: 14px "Microsoft YaHei", STXihei, sans-serif;
+    font-weight: bold;
+    height: 50px;
+}
+
+input {
+    height: 25px;
+    font-size: 13px;
+    margin-left: 10px;
+}
+
+.dentry_name {
+    float: left;
+    padding-left: 8px;
+    cursor: pointer;
+}
+
+.dentry_icon {
+    height: 30px;
+    width: 30px;
+    float: left;
+    padding: 2px;
+    cursor: pointer;
+}
+
+.new_dentry_name {
+    margin-top: 5px;
+    margin-left: 0;
+    padding-left: 5px;
+}
+
+.new_thumbnail_dentry_name {
+    position: relative;
+    left: -20px;
+    width: 100px;
+    text-align: center;
+
+}
+
+.page_turning {
+    height: 50px;
+    padding-bottom: 20px;
+    display: none;
+}
+
+.upload_dialog {
+    width: 650px;
+    height: 500px;
+    margin-left: -325px;
+    margin-top: -250px;
+
+}
+
+.btn-single-download {
+    display: none;
+    float: right;
+    margin-right: 10px;
+    padding-top: 8px;
+    cursor: pointer;
+}
+
+.btn-download-link {
+    display: none;
+    float: right;
+    margin-right: 10px;
+    padding-top: 8px;
+    cursor: pointer;
+}
+
+.btn-single-delete {
+    display: none;
+    float: right;
+    margin-right: 10px;
+    padding-top: 8px;
+    cursor: pointer;
+}
+
+.btn-convertor {
+    display: none;
+    float: right;
+    margin-right: 8px;
+    padding-top: 9px;
+    cursor: pointer;
+}
+
+.message_show {
+    font: 14px "Microsoft YaHei", STXihei, sans-serif;
+    padding-top: 10px;
+}
+
+.tooltip {
+    display: block;
+    text-align: left;
+    padding-left: 10px;
+    position: relative;
+    top: 0;
+    height: 40px;
+    font-size: 12px;
+    line-height: 40px;
+    width: 100%;
+}
+
+.tooltip span {
+    display: inline-block;
+    width: 90%;
+    overflow: hidden;
+}
+
+.tooltip_success {
+    background-color: #DFF0D8;
+}
+
+.tooltip_error {
+    background-color: #F2DEDE;
+}
+
+.tooltip_info {
+    background-color: #FCF8E3;
+}
+
+.btn_close_tooltip {
+    float: right;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.btn_close_tooltip img {
+    width: 10px;
+}
+
+.progress {
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+    float: left;
+    vertical-align: middle;
+    width: 180px;
+    margin: 10px;
+    height: 10px;
+    background-color: #dcdcdc;
+}
+
+.green {
+    height: 10px;
+    background: #4ac19a;
+    width: 0;
+}
+
+/*.upload_show   table{
+    border: solid 1px #cccccc;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+*/
+
+.upload_show td {
+    height: 30px;
+    white-space: nowrap;
+}
+
+.upload_show label {
+    padding-left: 10px;
+
+}
+
+#Upload_table label {
+    padding-left: 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.show_UploadProgress {
+    width: 650px;
+    height: 400px;
+    overflow-x: hidden;
+}
+
+#downloadLinkDialog p {
+    text-align: left;
+    height: auto;
+    margin-bottom: 10px;
+    width: 680px;
+    min-height: 40px;
+    padding-top: 10px;
+    float: left;
+}
+
+#downloadLinkDialog span {
+    width: 140px;
+    height: 40px;
+    /* display: block;*/
+    float: left;
+
+}
+
+.downloadLink {
+    width: 850px;
+    margin-left: -375px;
+}
+
+#downloadLinkDialog .link {
+    width: 540px;
+    display: inline-block;
+    margin-bottom: 10px;
+    word-break: break-all;
+    vertical-align: middle;
+}
+
+#downloadLinkDialog .dg_container {
+    height: auto;
+    min-height: 150px;
+    vertical-align: middle;
+}
+
+#downloadLinkDialog .link_div {
+    height: 150%;
+    min-height: 10px;
+
+}
+
+.question_pop {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    text-align: center;
+    width: 100%;
+}
+
+.hip_wap {
+    z-index: 6;
+    border-radius: 2px;
+    text-align: center;
+    margin: 400px auto 0;
+    display: inline-block;
+    max-width: 70%;
+}
+
+.pop_body {
+    width: auto;
+}
+
+.pop_body .main_sensitive_gray {
+    background: #535353;
+    padding: 14px 46px;
+    color: #fff;
+    opacity: 0.9;
+    font-size: 16px;
+    line-height: 20px;
+    filter: alpha(opacity=90);
+    box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.098);
+}
+
+.main {
+
+    height: 100%;
+}
+
+.red_font {
+    color: #e90909;
+}
+
+.pop_body .hip_error {
+    background: #D24C4C none repeat scroll 0 0;
+}
+
+.pop_body .hip_warn {
+    background: #F5F22B none repeat scroll 0 0;
+    color: #2A291B;
+}
+
