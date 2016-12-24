@@ -2,21 +2,28 @@
  * Created by Administrator on 2016/12/12.
  */
 import React from 'react';
-var $ = require("../build/jquery-2.2.0.min.js");
 export default class DentryDetail extends React.Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {data: []};
+
+    static convertSize(value) {
+        if (value === "-") {
+            return value;
+        }
+
+        if (null === value || value === '') {
+            return "0 Bytes";
+        }
+        var unitArr = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+        var index = 0;
+
+        var quotient = parseFloat(value);
+        while (quotient > 1024) {
+            index += 1;
+            quotient = quotient / 1024;
+        }
+        return quotient.toFixed(2) + " " + unitArr[index];
     }
 
-    componentDidMount() {
-        $.get(this.props.listUrl, function (result) {
-            this.setState({
-                data: result.items
-            });
-        }.bind(this));
-    }
 
     static getDentryImage(type, ext) {
         var iconPath;
@@ -71,55 +78,43 @@ export default class DentryDetail extends React.Component {
         return iconPath;
     }
 
-
+    static formatDate(updateAt) {
+        var date = new Date(updateAt);
+        return date.getFullYear() + "-" + (date.getMonth() + 1 >= 10 ? date.getMonth() + 1 : "0" + (date.getMonth() + 1)) + "-" + (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) + " " + (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ":" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) + ":" + (date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds());
+    }
 
     render() {
-
+        var item = this.props.dentry;
+        var size = "-";
+        var ext = "";
+        var updateAt = DentryDetail.formatDate(item.update_at);
+        if (item.inode) {
+            size = item.inode.size;
+            ext = item.inode.ext;
+            size = DentryDetail.convertSize(size);
+        }
+        var iconAddr = DentryDetail.getDentryImage(item.type, ext);
         return (
-            <div>
-                <table id="list_table" className="list_table">
-                    <tr id="list_title" className="list_title">
-                        <td className="list_td" style={{width: " 30px"}}><input type="checkbox" id="check_all"/>
-                        </td>
-                        <td className="list_td_name" style={{width: "auto"}}>文件名</td>
-                        <td className="list_td" style={{width: "30px"}}>公开</td>
-                        <td className="list_td" style={{width: "60px"}}>大小</td>
-                        <td className="list_td" style={{width: "150px"}}>修改日期</td>
-                    </tr>
-                    {
-                        this.state.data.map(function (item) {
-                            var size = "-";
-                            var ext = "";
-                            if(item.inode){
-                                size = item.inode.size;
-                                ext = item.inode.ext;
-                            }
-                            var iconAddr = DentryDetail.getDentryImage(item.type,ext);
+                <tr className="dentry_detail">
+                    <td className="list_td"><input type="checkbox"/>
+                    </td>
+                    <td className="list_td">
+                        <div className="list_dentry_name"><img className="dentry_icon"
+                                                               src={iconAddr}/>
+                        </div>
+                        <div className="list_link"/>
+                        <label className="dentry_name">{item.name}</label>
+                        <div className="list_link"/>
+                        <a className="btn-single-delete"><img src="build/img/recycle.png"/></a>
+                        <a className="btn-single-download"><img src="build/img/download2.png"/></a>
+                        <a className="btn-download-link"><img src="build/img/link.png"/></a>
 
-                            return <tr className="dentry_detail">
-                                <td className="list_td"><input type="checkbox" className="checkbox"/>
-                                </td>
-                                <td className="list_td">
-                                    <div className="list_dentry_name"><img className="dentry_icon"
-                                                                           src={iconAddr}/>
-                                    </div>
-                                    <div className="list_link"/>
-                                    <label className="dentry_name">{item.name}</label>
-                                    <div className="list_link"/>
-                                    <a className="btn-single-delete"><img src="build/img/recycle.png"/></a>
-                                    <a className="btn-single-download"><img src="build/img/download2.png"/></a>
-                                    <a className="btn-download-link"><img src="build/img/link.png"/></a>
-
-                                </td>
-                                <td className="list_td"><input type="checkbox" checked="checked"
-                                                               className="checkbox-scope"/></td>
-                                <td className="list_td">{size}</td>
-                                <td className="list_td">{item.update_at}</td>
-                            </tr>
-                        })
-                    }
-                </table>
-            </div>
+                    </td>
+                    <td className="list_td"><input type="checkbox" checked="checked"
+                                                   className="checkbox-scope"/></td>
+                    <td className="list_td">{size}</td>
+                    <td className="list_td">{updateAt}</td>
+                </tr>
         )
     }
 }

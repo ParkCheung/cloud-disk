@@ -10,13 +10,14 @@ import CsmngFooter from './CsmngFooter.js';
 
 class App extends React.Component {
 
+
    render(){
        return(
            <div>
                <CsmngHeader/>
                <CsmngNavigation/>
                <CsmngToolBar/>
-               <DentryListPanel/>
+               <DentryListPanel session="e6773402-8f17-4cf1-ba9f-02526af0d399" path="my_sample"/>
                <CsmngFooter/>
            </div>
        )

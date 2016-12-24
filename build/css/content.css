@@ -400,6 +400,7 @@ input {
 .dentry_name {
     float: left;
     padding-left: 8px;
+    padding-top: 5px;
     cursor: pointer;
 }
 
@@ -428,7 +429,6 @@ input {
 .page_turning {
     height: 50px;
     padding-bottom: 20px;
-    display: none;
 }
 
 .upload_dialog {
