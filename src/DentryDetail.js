@@ -83,6 +83,11 @@ export default class DentryDetail extends React.Component {
         return date.getFullYear() + "-" + (date.getMonth() + 1 >= 10 ? date.getMonth() + 1 : "0" + (date.getMonth() + 1)) + "-" + (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) + " " + (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ":" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) + ":" + (date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds());
     }
 
+
+    handleClick(){
+        this.props.onClick(this.state)
+    }
+
     render() {
         var item = this.props.dentry;
         var size = "-";
@@ -95,26 +100,26 @@ export default class DentryDetail extends React.Component {
         }
         var iconAddr = DentryDetail.getDentryImage(item.type, ext);
         return (
-                <tr className="dentry_detail">
-                    <td className="list_td"><input type="checkbox"/>
-                    </td>
-                    <td className="list_td">
-                        <div className="list_dentry_name"><img className="dentry_icon"
-                                                               src={iconAddr}/>
-                        </div>
-                        <div className="list_link"/>
-                        <label className="dentry_name">{item.name}</label>
-                        <div className="list_link"/>
-                        <a className="btn-single-delete"><img src="build/img/recycle.png"/></a>
-                        <a className="btn-single-download"><img src="build/img/download2.png"/></a>
-                        <a className="btn-download-link"><img src="build/img/link.png"/></a>
+            <tr className="dentry_detail">
+                <td className="list_td"><input type="checkbox"/>
+                </td>
+                <td className="list_td">
+                    <div className="list_dentry_name"><img className="dentry_icon"
+                                                           src={iconAddr}/>
+                    </div>
+                    <div className="list_link"/>
+                    <label className="dentry_name" onClick={this.handleClick.bind(this)}>{item.name}</label>
+                    <div className="list_link"/>
+                    <a className="btn-single-delete"><img src="build/img/recycle.png"/></a>
+                    <a className="btn-single-download"><img src="build/img/download2.png"/></a>
+                    <a className="btn-download-link"><img src="build/img/link.png"/></a>
 
-                    </td>
-                    <td className="list_td"><input type="checkbox" checked="checked"
-                                                   className="checkbox-scope"/></td>
-                    <td className="list_td">{size}</td>
-                    <td className="list_td">{updateAt}</td>
-                </tr>
+                </td>
+                <td className="list_td"><input type="checkbox" checked={item.scope == 1}
+                                               className="checkbox-scope"/></td>
+                <td className="list_td">{size}</td>
+                <td className="list_td">{updateAt}</td>
+            </tr>
         )
     }
 }

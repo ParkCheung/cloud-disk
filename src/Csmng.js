@@ -9,15 +9,27 @@ import DentryListPanel from './DentryListPanel.js';
 import CsmngFooter from './CsmngFooter.js';
 
 class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            currentPath: "/my_sample"
+        }
+    }
 
+
+    onChangePath(path){
+        this.setState({
+            currentPath: path
+        });
+    }
 
    render(){
        return(
            <div>
                <CsmngHeader/>
-               <CsmngNavigation/>
+               <CsmngNavigation currentPath={this.state.currentPath} onClick={this.onChangePath.bind(this)}/>
                <CsmngToolBar/>
-               <DentryListPanel session="e6773402-8f17-4cf1-ba9f-02526af0d399" path="my_sample"/>
+               <DentryListPanel session="e6773402-8f17-4cf1-ba9f-02526af0d399" currentPath={this.state.currentPath} onCurrentPathChange={this.onChangePath.bind(this)}/>
                <CsmngFooter/>
            </div>
        )

@@ -163,7 +163,7 @@
     width: 100px;
     height: 40px;
     float: right;
-    padding-top: 15px
+    padding-top: 15px;
 }
 
 .page_div {
@@ -258,7 +258,6 @@
     margin-right: 20px;
     height: 30px;
     text-align: center;
-
 }
 
 .btn_link {
