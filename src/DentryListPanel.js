@@ -13,7 +13,7 @@ export default class DentryListPanel extends React.Component {
         this.pageButtom = 0;
         this.hasNextPage = false;
         this.hasPrePage = false;
-        this.currentPath = this.props.path;
+        this.currentPath = "";
         this.session = this.props.session;
         this.state = {
             data: []
@@ -58,6 +58,7 @@ export default class DentryListPanel extends React.Component {
         }.bind(this));
     }
 
+    //文件夹翻页 文件下载
     handleItemClick(item){
         if(item.type === 0){
             this.currentPath = item.path;
@@ -67,22 +68,20 @@ export default class DentryListPanel extends React.Component {
         }
     }
 
+    //获取上一页
     pagePre() {
         var url = "http://sdpcs.dev.web.nd/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+gt+" + this.pageTop + "&$limit=16&$orderby=updateAt+Asc&session=" + this.session;
         this.getList(url, "pre")
     }
 
+    //获取下一页
     pageNext() {
         var url = "http://sdpcs.dev.web.nd/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+lt+" + this.pageButtom + "&$limit=16&$orderby=updateAt+Desc&session=" + this.session;
         this.getList(url, "next")
     }
 
-    componentDidMount() {
-        var url = "http://sdpcs.dev.web.nd/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+gt+0&$limit=16&$orderby=updateAt+Desc&session=" + this.session;
-        this.getList(url)
-    }
-
     render() {
+        //第一次进入该目录
         if(this.props.currentPath !== this.currentPath){
             this.currentPath = this.props.currentPath;
             var url = "http://sdpcs.dev.web.nd/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+gt+0&$limit=16&$orderby=updateAt+Desc&session=" + this.session;
