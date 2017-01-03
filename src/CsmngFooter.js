@@ -7,7 +7,7 @@ export default class CsmngFooter extends React.Component {
     render() {
         return (
             <div className="footer">
-                <p className="copyright">Copyright © 2016 NetDragon Websoft Inc. All Rights Reserved</p>
+                <p className="copyright">Copyright © 2017 NetDragon Websoft Inc. All Rights Reserved</p>
             </div>
         )
     }

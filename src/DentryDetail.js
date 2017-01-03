@@ -1,4 +1,5 @@
 /**
+ * 列表项详情
  * Created by Administrator on 2016/12/12.
  */
 import React from 'react';
@@ -84,9 +85,14 @@ export default class DentryDetail extends React.Component {
     }
 
 
-    handleClick(){
+    handleDentryClick(){
         this.props.onClick(this.state)
     }
+
+    handleCheckClick(){
+        this.props.onCheckClick(this.state)
+    }
+
 
     render() {
         var item = this.props.dentry;
@@ -99,16 +105,17 @@ export default class DentryDetail extends React.Component {
             size = DentryDetail.convertSize(size);
         }
         var iconAddr = DentryDetail.getDentryImage(item.type, ext);
+
         return (
             <tr className="dentry_detail">
-                <td className="list_td"><input type="checkbox"/>
+                <td className="list_td"><input type="checkbox" checked={this.props.checked} onClick={this.handleCheckClick.bind(this)}/>
                 </td>
                 <td className="list_td">
                     <div className="list_dentry_name"><img className="dentry_icon"
                                                            src={iconAddr}/>
                     </div>
                     <div className="list_link"/>
-                    <label className="dentry_name" onClick={this.handleClick.bind(this)}>{item.name}</label>
+                    <label className="dentry_name" onClick={this.handleDentryClick.bind(this)}>{item.name}</label>
                     <div className="list_link"/>
                     <a className="btn-single-delete"><img src="build/img/recycle.png"/></a>
                     <a className="btn-single-download"><img src="build/img/download2.png"/></a>

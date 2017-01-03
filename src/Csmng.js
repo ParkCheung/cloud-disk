@@ -12,28 +12,42 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentPath: "/my_sample"
+            currentPath: "/csample",
+            selectItems: []
         }
     }
 
 
-    onChangePath(path){
+    onChangePath(path) {
         this.setState({
             currentPath: path
         });
     }
 
-   render(){
-       return(
-           <div>
-               <CsmngHeader/>
-               <CsmngNavigation currentPath={this.state.currentPath} onClick={this.onChangePath.bind(this)}/>
-               <CsmngToolBar/>
-               <DentryListPanel session="e6773402-8f17-4cf1-ba9f-02526af0d399" currentPath={this.state.currentPath} onCurrentPathChange={this.onChangePath.bind(this)}/>
-               <CsmngFooter/>
-           </div>
-       )
-   }
+    onChangeSelect(selectedItems) {
+        this.setState({
+            selectItems: selectedItems
+        });
+    }
+
+
+    render() {
+
+        var csHost = "cs.101.com";
+        var csSession = "17d59d2f-c855-474d-92e1-543cc245f988";
+
+        return (
+            <div>
+                <CsmngHeader/>
+                <CsmngNavigation currentPath={this.state.currentPath} onClick={this.onChangePath.bind(this)}/>
+                <CsmngToolBar selectItems={this.state.selectItems}/>
+                <DentryListPanel host={csHost} session={csSession} currentPath={this.state.currentPath}
+                                 onCurrentPathChange={this.onChangePath.bind(this)}
+                                 onSelectChange={this.onChangeSelect.bind(this)}/>
+                <CsmngFooter/>
+            </div>
+        )
+    }
 
 }
 
