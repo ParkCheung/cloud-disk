@@ -72,7 +72,7 @@ export default class DentryListPanel extends React.Component {
             this.getList(url)
         } else {
             //文件 直接下载
-            url = "http://" + this.host + "/v0.1/download?path=" + this.currentPath;
+            url = "http://" + this.host + "/v0.1/download?path=" + encodeURIComponent(item.path);
             if (item.scope === 0) {
                 url += "&session=" + this.session;
             }
