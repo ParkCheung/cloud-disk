@@ -22,6 +22,7 @@ export default class UploadPanel extends React.Component {
     }
 
     render() {
+
         var display = this.props.show ? "" : "none";
         return (
             <div className="fancybox-overlay fancybox-overlay-fixed" id="upload_div"

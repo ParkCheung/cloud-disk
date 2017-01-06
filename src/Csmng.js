@@ -76,4 +76,4 @@ class App extends React.Component {
 
 }
 
-React.render(<App />, document.getElementById('app'));
+React.render(<App client={window.CSClient}/>, document.getElementById('app'));
