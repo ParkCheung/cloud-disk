@@ -17,25 +17,25 @@ class App extends React.Component {
             currentPath: "/csample",
             selectItems: [],
             showUploadPanel: false,
-            operate : ""
+            operate: "",
+            updateAt: 0,
         }
     }
 
     //监控工具栏点击事件
     onOperateChange(operate) {
-
-        switch(operate){
+        switch (operate) {
             case "upload":
             case "upload_folder":
                 this.setState({
                     showUploadPanel: true,
-                    operate :operate
+                    operate: operate
                 });
         }
     }
 
     //关闭上传面板
-    closeUploadPanel(){
+    closeUploadPanel() {
         this.setState({
             showUploadPanel: false
         });
@@ -55,8 +55,16 @@ class App extends React.Component {
         });
     }
 
+    //上传成功 刷新列表
+    onUploadSuccess() {
+        this.setState({
+            updateAt: new Date().getTime()
+        });
+    }
+
     render() {
 
+        var serviceName = "csample";
         var csHost = "cs.101.com";
         var csSession = "17d59d2f-c855-474d-92e1-543cc245f988";
 
@@ -65,10 +73,17 @@ class App extends React.Component {
                 <CsmngHeader/>
                 <CsmngNavigation currentPath={this.state.currentPath} onClick={this.onChangePath.bind(this)}/>
                 <CsmngToolBar selectItems={this.state.selectItems} onOperateChange={this.onOperateChange.bind(this)}/>
-                <UploadPanel show={this.state.showUploadPanel} type={this.state.operate} closeUploadPanel={this.closeUploadPanel.bind(this)}/>
-                <DentryListPanel host={csHost} session={csSession} currentPath={this.state.currentPath}
+                <UploadPanel show={this.state.showUploadPanel} type={this.state.operate}
+                             closeUploadPanel={this.closeUploadPanel.bind(this)}
+                             serviceName={serviceName}
+                             csSession={csSession}
+                             currentPath={this.state.currentPath}
+                             uploadSuccess={this.onUploadSuccess.bind(this)}/>
+                <DentryListPanel host={csHost} session={csSession}
+                                 currentPath={this.state.currentPath}
                                  onCurrentPathChange={this.onChangePath.bind(this)}
-                                 onSelectChange={this.onChangeSelect.bind(this)}/>
+                                 onSelectChange={this.onChangeSelect.bind(this)}
+                                 updateAt={this.state.updateAt}/>
                 <CsmngFooter/>
             </div>
         )

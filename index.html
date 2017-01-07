@@ -14,14 +14,18 @@
     <link rel="stylesheet" type="text/css" media="screen" href="build/css/detail.css">
     <link rel="stylesheet" type="text/css" media="screen" href="build/css/jquery.qtip.css">
     <link rel="stylesheet" type="text/css" media="screen" href="build/css/font-awesome.min.css">
-
+    <script src="build/jquery-2.2.0.min.js"></script>
 </head>
 <body>
 <div id="app"></div>
 
 <script src="http://cdn.bootcss.com/react/0.13.3/react.min.js"></script>
 <script src="build/bundle.js"></script>
-<script src="build/cs-object-sdk.min.js"></script>
-<script src="build/jquery-2.2.0.min.js"></script>
+<script src="build/cs-object-sdk.js"></script>
+
+
+<script>
+    Content.setEnv("PRODUCTION");
+</script>
 </body>
 </html>

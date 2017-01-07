@@ -3,7 +3,6 @@
  */
 import React from 'react';
 import DentryDetail from './DentryDetail.js';
-var $ = require("../build/jquery-2.2.0.min.js");
 
 export default class DentryListPanel extends React.Component {
 
@@ -16,6 +15,7 @@ export default class DentryListPanel extends React.Component {
         this.currentPath = "";
         this.host = this.props.host;
         this.session = this.props.session;
+        this.updateAt = this.props.updateAt;
         this.selectItems = [];
         this.state = {
             data: [],
@@ -118,9 +118,10 @@ export default class DentryListPanel extends React.Component {
     }
 
     render() {
-        //第一次进入该目录
-        if (this.props.currentPath !== this.currentPath) {
+        //第一次进入该目录或者列表有更新
+        if (this.props.currentPath !== this.currentPath || this.props.updateAt !== this.updateAt) {
             this.currentPath = this.props.currentPath;
+            this.updateAt = this.props.updateAt;
             var url = "http://" + this.host + "/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+gt+0&$limit=16&$orderby=updateAt+Desc&session=" + this.session;
             this.getList(url)
         }
