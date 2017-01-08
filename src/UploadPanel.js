@@ -3,19 +3,28 @@
  * Created by Administrator on 2017/1/4.
  */
 import React from 'react';
+import Progress from './Progress'
 export default class UploadPanel extends React.Component {
     constructor(props) {
         super(props);
+        this.uploadingNum = 0;
+        this.state = {
+            files: []
+        };
+
+        //获取session
         this.cssession = {
             getSession: function (callback) {
-                callback(this.props.csSession);
+                callback(Content.SESSION);
             }.bind(this)
         };
 
+        //监听器
         this.listenner = {
-            onNotifySuccess: function (data) {
-                console.log(data);
-                this.updateList();
+            onNotifySuccess: function () {
+                if (--this.uploadingNum === 0) {
+                    this.updateList();
+                }
             }.bind(this),
 
             onNotifyFail: function (data) {
@@ -23,34 +32,46 @@ export default class UploadPanel extends React.Component {
             },
 
             onNotifyProgress: function (progress) {
-                console.log(JSON.stringify(progress));
-                // var percent = Math.floor((progress.loaded / progress.total).toFixed(2) * 100);
-                // $('#progress_bar').css("width", percent + "%");
-                // $('#progress_num').text(percent + "%");
+                var percent = Math.floor((progress.loaded / progress.total).toFixed(2) * 100);
+                $('#' + progress.file_hash + ' div[name="progress_bar"]').css("width", percent + "%");
+                $('#' + progress.file_hash + ' p').text(percent + "%");
             }
         };
     }
 
 
-    //关闭面板操作
+    //关闭面板操作并刷新列表
     closePanel() {
         this.props.closeUploadPanel();
+        this.updateList();
     }
 
+    //上传文件成功 刷新列表
     updateList() {
         this.props.uploadSuccess(this.currentPath);
     }
 
+    //选择文件后开始上传
     handleChange(e) {
+        var fileList = e.target.files;
+        var files = [];
+        for (var k = 0; k < fileList.length; k++) {
+            fileList[k].hash = CSUtils.randomString(16);
+            files.push(fileList[k]);
+        }
 
-        var files = e.target.files;
+        this.setState({
+            files: this.state.files.concat(files)
+        });
+
         for (var i = 0; i < files.length; i++) {
             var file = files[i];
-            var remotePath = this.currentPath + "/" + file.name;
-            CSClient.upload(this.serviceName, file, remotePath, 0, this.listenner, null, this.cssession);
+            var remotePath = this.currentPath + "/" + (file.webkitRelativePath ? file.webkitRelativePath : file.name);
+            this.uploadingNum++;
+            //TODO 获取公开私密属性
+            CSClient.upload(Content.SERVICENAME, file, remotePath, 0, this.listenner, null, this.cssession);
         }
     }
-
 
     //点击上传文件获取上传文件夹
     handleClick() {
@@ -64,12 +85,28 @@ export default class UploadPanel extends React.Component {
         }
     }
 
+    //移除文件 终止上传
+    removeFile(file) {
+        CSClient.stopUpload(file);
+
+        //重新渲染进度界面
+        var filesList = this.state.files;
+        for (var i = 0; i < filesList.length; i++) {
+            if (filesList[i].hash == file.hash) {
+                filesList.splice(i, 1);
+                break;
+            }
+        }
+        this.setState({
+            files: filesList
+        });
+        if( this.uploadingNum > 0){
+            this.uploadingNum--;
+        }
+    }
+
     render() {
-
-        this.serviceName = this.props.serviceName;
-        this.session = this.props.session;
         this.currentPath = this.props.currentPath;
-
         var display = this.props.show ? "" : "none";
         return (
             <div className="fancybox-overlay fancybox-overlay-fixed" id="upload_div"
@@ -84,19 +121,19 @@ export default class UploadPanel extends React.Component {
                             <h5>文件最大支持300MB</h5>
                             {
                                 this.props.type === "upload" ? <div style={{float: "right"}}>
-                                    <input type="file" name="file" multiple="" ref="file_select"
+                                    <input type="file" name="file" multiple="true" ref="file_select"
                                            style={{display: "none"}} onChange={this.handleChange.bind(this)}/>
                                     <a id="upload_button"
                                        className="btn1 btn_float_right" onClick={this.handleClick.bind(this)}>上传文件</a>
                                 </div> :
                                     <div style={{float: "right"}}>
-                                        <input type="file" style={{display: "none"}} ref="upload_floder_chooser"/>
+                                        <input type="file" style={{display: "none"}} ref="upload_floder_chooser"
+                                               onChange={this.handleChange.bind(this)}/>
                                         <a id="upload_floder_button"
                                            className="btn1 btn_float_right"
                                            onClick={this.handleClick.bind(this)}>上传文件夹</a>
                                     </div>
                             }
-
                             <label style={{padding: "13px", float: "right", "vertical-align": "middle"}}>
                                 <input id="scope_check" type="checkbox"/>
                                 <label style={{
@@ -106,28 +143,10 @@ export default class UploadPanel extends React.Component {
                                 }}>公开文件</label>
                             </label>
                         </div>
-                        <div className="upload_show">
-
-                            <table className="function_table">
-                                <tr id="Upload_title" className="table_tile">
-                                    <td style={{width: "100px"}}><label>文件名</label></td>
-                                    <td style={{width: "280px"}}></td>
-                                    <td style={{width: "80px"}}><label>大小</label></td>
-                                    <td style={{width: "100px"}}><label>上传速度</label></td>
-                                    <td style={{width: "20px"}}></td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div id="showUploadProgress" className="show_UploadProgress">
-                            <table id="Upload_table" className="function_table" style={{width: "633px"}}>
-                                <tr id="Upload_bottom">
-                                </tr>
-                            </table>
-                        </div>
+                        <Progress files={this.state.files} onRemoveFile={this.removeFile.bind(this)}/>
                     </div>
                 </div>
             </div>
         )
     }
-
 }

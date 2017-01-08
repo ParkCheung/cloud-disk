@@ -13,8 +13,6 @@ export default class DentryListPanel extends React.Component {
         this.hasNextPage = false;
         this.hasPrePage = false;
         this.currentPath = "";
-        this.host = this.props.host;
-        this.session = this.props.session;
         this.updateAt = this.props.updateAt;
         this.selectItems = [];
         this.state = {
@@ -58,6 +56,8 @@ export default class DentryListPanel extends React.Component {
             this.setState({
                 data: result.items
             });
+            //TODO 通知上层组件 列表已刷新，被选项清空
+            this.selectItems = [];
         }.bind(this));
     }
 
@@ -68,13 +68,13 @@ export default class DentryListPanel extends React.Component {
         if (item.type === 0) {
             this.currentPath = item.path;
             this.props.onCurrentPathChange(this.currentPath);
-            url = "http://" + this.host + "/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+gt+0&$limit=16&$orderby=updateAt+Desc&session=" + this.session;
+            url = "http://" + Content.CSHOST + "/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+gt+0&$limit=16&$orderby=updateAt+Desc&session=" + Content.SESSION;
             this.getList(url)
         } else {
             //文件 直接下载
-            url = "http://" + this.host + "/v0.1/download?path=" + encodeURIComponent(item.path);
+            url = "http://" + Content.CSHOST + "/v0.1/download?path=" + encodeURIComponent(item.path);
             if (item.scope === 0) {
-                url += "&session=" + this.session;
+                url += "&session=" + Content.SESSION;
             }
             window.open(url);
         }
@@ -84,7 +84,7 @@ export default class DentryListPanel extends React.Component {
         if (this.selectItems.length < 15) {
             this.selectItems = [];
             for (var i = 0; i < this.state.data.length; i++) {
-                this.selectItems.push(this.state.data[i].path);
+                this.selectItems.push(this.state.data[i]);
             }
         } else {
             this.selectItems = [];
@@ -94,10 +94,10 @@ export default class DentryListPanel extends React.Component {
 
 
     //列表选项被选中事件
-    handleCheckClick(path) {
-        var index = this.selectItems.indexOf(path);
+    handleCheckClick(item) {
+        var index = this.selectItems.indexOf(item);
         if (index === -1) {
-            this.selectItems.push(path);
+            this.selectItems.push(item);
         } else {
             this.selectItems.splice(index, 1);
         }
@@ -107,13 +107,13 @@ export default class DentryListPanel extends React.Component {
 
     //获取上一页
     pagePre() {
-        var url = "http://" + this.host + "/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+gt+" + this.pageTop + "&$limit=16&$orderby=updateAt+Asc&session=" + this.session;
+        var url = "http://" + Content.CSHOST + "/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+gt+" + this.pageTop + "&$limit=16&$orderby=updateAt+Asc&session=" + Content.SESSION;
         this.getList(url, "pre")
     }
 
     //获取下一页
     pageNext() {
-        var url = "http://" + this.host + "/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+lt+" + this.pageButtom + "&$limit=16&$orderby=updateAt+Desc&session=" + this.session;
+        var url = "http://" +Content.CSHOST + "/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+lt+" + this.pageButtom + "&$limit=16&$orderby=updateAt+Desc&session=" + Content.SESSION;
         this.getList(url, "next")
     }
 
@@ -122,7 +122,7 @@ export default class DentryListPanel extends React.Component {
         if (this.props.currentPath !== this.currentPath || this.props.updateAt !== this.updateAt) {
             this.currentPath = this.props.currentPath;
             this.updateAt = this.props.updateAt;
-            var url = "http://" + this.host + "/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+gt+0&$limit=16&$orderby=updateAt+Desc&session=" + this.session;
+            var url = "http://" + Content.CSHOST + "/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+gt+0&$limit=16&$orderby=updateAt+Desc&session=" + Content.SESSION;
             this.getList(url)
         }
 
@@ -131,7 +131,6 @@ export default class DentryListPanel extends React.Component {
         return (
             <div className="content_container list_mode_div">
                 <div className="wrap" style={{float: "left"}}>
-
                     <table id="list_table" className="list_table">
                         <tr id="list_title" className="list_title">
                             <td className="list_td" style={{width: " 30px"}}><input type="checkbox"
@@ -154,9 +153,9 @@ export default class DentryListPanel extends React.Component {
                                 }
                                 offset++;
 
-                                var checked = this.selectItems.indexOf(item.path) !== -1;
+                                var checked = this.selectItems.indexOf(item) !== -1;
                                 return <DentryDetail onClick={this.handleItemClick.bind(this, item)}
-                                                     onCheckClick={this.handleCheckClick.bind(this, item.path)}
+                                                     onCheckClick={this.handleCheckClick.bind(this, item)}
                                                      dentry={item}
                                                      checked={checked}/>
                             }.bind(this))

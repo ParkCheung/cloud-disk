@@ -2743,7 +2743,7 @@
          * 取消上传
          * @param file
          */
-        stop: function (file) {
+        stopUpload: function (file) {
             if (!file) {
                 return;
             }

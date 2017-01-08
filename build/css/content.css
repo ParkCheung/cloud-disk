@@ -521,8 +521,8 @@ input {
     float: left;
     vertical-align: middle;
     width: 180px;
-    margin: 10px;
     height: 10px;
+    margin: 10px 10px 10px 20px;
     background-color: #dcdcdc;
 }
 

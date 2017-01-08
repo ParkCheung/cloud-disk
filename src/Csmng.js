@@ -31,6 +31,15 @@ class App extends React.Component {
                     showUploadPanel: true,
                     operate: operate
                 });
+                break;
+            case "download":
+                var dentry = this.state.selectItems[0];
+                //文件 直接下载
+                var url = "http://" + Content.CSHOST + "/v0.1/download?path=" + encodeURIComponent(dentry.path);
+                if (dentry.scope === 0) {
+                    url += "&session=" + Content.SESSION;
+                }
+                window.open(url);
         }
     }
 
@@ -63,27 +72,23 @@ class App extends React.Component {
     }
 
     render() {
-
-        var serviceName = "csample";
-        var csHost = "cs.101.com";
-        var csSession = "17d59d2f-c855-474d-92e1-543cc245f988";
-
         return (
             <div>
                 <CsmngHeader/>
-                <CsmngNavigation currentPath={this.state.currentPath} onClick={this.onChangePath.bind(this)}/>
-                <CsmngToolBar selectItems={this.state.selectItems} onOperateChange={this.onOperateChange.bind(this)}/>
-                <UploadPanel show={this.state.showUploadPanel} type={this.state.operate}
+                <CsmngNavigation currentPath={this.state.currentPath}
+                                 onClick={this.onChangePath.bind(this)}/>
+                <CsmngToolBar selectItems={this.state.selectItems}
+                              onOperateChange={this.onOperateChange.bind(this)}/>
+                <UploadPanel show={this.state.showUploadPanel}
+                             type={this.state.operate}
                              closeUploadPanel={this.closeUploadPanel.bind(this)}
-                             serviceName={serviceName}
-                             csSession={csSession}
                              currentPath={this.state.currentPath}
                              uploadSuccess={this.onUploadSuccess.bind(this)}/>
-                <DentryListPanel host={csHost} session={csSession}
-                                 currentPath={this.state.currentPath}
-                                 onCurrentPathChange={this.onChangePath.bind(this)}
-                                 onSelectChange={this.onChangeSelect.bind(this)}
-                                 updateAt={this.state.updateAt}/>
+                <DentryListPanel
+                    currentPath={this.state.currentPath}
+                    onCurrentPathChange={this.onChangePath.bind(this)}
+                    onSelectChange={this.onChangeSelect.bind(this)}
+                    updateAt={this.state.updateAt}/>
                 <CsmngFooter/>
             </div>
         )
