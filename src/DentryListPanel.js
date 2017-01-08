@@ -56,8 +56,6 @@ export default class DentryListPanel extends React.Component {
             this.setState({
                 data: result.items
             });
-            //TODO 通知上层组件 列表已刷新，被选项清空
-            this.selectItems = [];
         }.bind(this));
     }
 
@@ -81,14 +79,7 @@ export default class DentryListPanel extends React.Component {
     }
 
     handleCheckAllClick() {
-        if (this.selectItems.length < 15) {
-            this.selectItems = [];
-            for (var i = 0; i < this.state.data.length; i++) {
-                this.selectItems.push(this.state.data[i]);
-            }
-        } else {
-            this.selectItems = [];
-        }
+        this.selectItems = this.selectItems.length < this.state.data.length ? this.state.data : [];
         this.props.onSelectChange(this.selectItems);
     }
 
@@ -113,7 +104,7 @@ export default class DentryListPanel extends React.Component {
 
     //获取下一页
     pageNext() {
-        var url = "http://" +Content.CSHOST + "/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+lt+" + this.pageButtom + "&$limit=16&$orderby=updateAt+Desc&session=" + Content.SESSION;
+        var url = "http://" + Content.CSHOST + "/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+lt+" + this.pageButtom + "&$limit=16&$orderby=updateAt+Desc&session=" + Content.SESSION;
         this.getList(url, "next")
     }
 
@@ -134,7 +125,7 @@ export default class DentryListPanel extends React.Component {
                     <table id="list_table" className="list_table">
                         <tr id="list_title" className="list_title">
                             <td className="list_td" style={{width: " 30px"}}><input type="checkbox"
-                                                                                    checked={this.selectItems.length === 15}
+                                                                                    checked={this.selectItems.length === length}
                                                                                     onClick={this.handleCheckAllClick.bind(this)}/>
                             </td>
                             <td className="list_td_name" style={{width: "auto"}}>文件名</td>

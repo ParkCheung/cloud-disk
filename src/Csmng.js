@@ -24,6 +24,7 @@ class App extends React.Component {
 
     //监控工具栏点击事件
     onOperateChange(operate) {
+        var url;
         switch (operate) {
             case "upload":
             case "upload_folder":
@@ -35,11 +36,30 @@ class App extends React.Component {
             case "download":
                 var dentry = this.state.selectItems[0];
                 //文件 直接下载
-                var url = "http://" + Content.CSHOST + "/v0.1/download?path=" + encodeURIComponent(dentry.path);
+                url = "http://" + Content.CSHOST + "/v0.1/download?path=" + encodeURIComponent(dentry.path);
                 if (dentry.scope === 0) {
                     url += "&session=" + Content.SESSION;
                 }
                 window.open(url);
+                break;
+            case "delete":
+                var deletePaths = [];
+                for (var i = 0; i < this.state.selectItems.length; i++) {
+                    deletePaths.push(this.state.selectItems[i].path);
+                }
+                var body = {
+                    path: this.state.currentPath,
+                    paths: deletePaths
+                };
+                url = "http://" + Content.CSHOST + "/v0.1/dentries/actions/delete?session=" + Content.SESSION;
+                CSHttpClient.doPatchRequest(url, JSON.stringify(body), null, function () {
+                    this.setState({
+                        updateAt: new Date().getTime()
+                    });
+                }, function (error) {
+                    console.log(error);
+                });
+                break;
         }
     }
 
