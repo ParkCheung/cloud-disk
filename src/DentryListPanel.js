@@ -119,13 +119,15 @@ export default class DentryListPanel extends React.Component {
 
         var offset = 0;
         var length = this.state.data.length;
+        var selectAll = length > 0 && this.selectItems.length === length;
+
         return (
             <div className="content_container list_mode_div">
                 <div className="wrap" style={{float: "left"}}>
                     <table id="list_table" className="list_table">
                         <tr id="list_title" className="list_title">
                             <td className="list_td" style={{width: " 30px"}}><input type="checkbox"
-                                                                                    checked={this.selectItems.length === length}
+                                                                                    checked={selectAll}
                                                                                     onClick={this.handleCheckAllClick.bind(this)}/>
                             </td>
                             <td className="list_td_name" style={{width: "auto"}}>文件名</td>

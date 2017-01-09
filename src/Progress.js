@@ -6,7 +6,7 @@ import DentryDetail from './DentryDetail'
 export default class Progress extends React.Component {
 
 
-    removeFile(file){
+    removeFile(file) {
         this.props.onRemoveFile(file);
     }
 
@@ -20,7 +20,6 @@ export default class Progress extends React.Component {
                         <td style={{width: "280px"}}></td>
                         <td style={{width: "80px"}}><label>大小</label></td>
                         <td style={{width: "100px"}}><label>上传速度</label></td>
-                        <td style={{width: "20px"}}></td>
                     </tr>
                     {
                         files.map(function (file) {
@@ -34,12 +33,14 @@ export default class Progress extends React.Component {
                                     <p style={{width: "30px", float: "left", paddingTop: "6px"}}>0%</p>
                                     <image className="progress_image" src="build/img/delete.png"
                                            style={{cursor: "pointer", float: "right", paddingTop: "8px"}}
-                                           title="点击取消文件上传" onClick={this.removeFile.bind(this,file)}/>
+                                           title="点击取消文件上传" onClick={this.removeFile.bind(this, file)}/>
                                 </td>
                                 <image className="complete" src="build/img/complete.png"
                                        style={{float: "right", height: "20px", display: "none"}}/>
                                 <td><label>{DentryDetail.convertSize(file.size)}</label></td>
-                                <td><label></label></td>
+                                <td id={file.hash + "_speed"}>
+                                    <div style={{width: "106px", marginLeft: "10px"}}></div>
+                                </td>
                             </tr>
                         }.bind(this))
                     }

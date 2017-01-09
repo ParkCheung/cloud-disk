@@ -7,6 +7,8 @@ import Progress from './Progress'
 export default class UploadPanel extends React.Component {
     constructor(props) {
         super(props);
+        this.preTime = 0;
+        this.preLoaded = 0;
         this.uploadingNum = 0;
         this.state = {
             files: []
@@ -35,7 +37,23 @@ export default class UploadPanel extends React.Component {
                 var percent = Math.floor((progress.loaded / progress.total).toFixed(2) * 100);
                 $('#' + progress.file_hash + ' div[name="progress_bar"]').css("width", percent + "%");
                 $('#' + progress.file_hash + ' p').text(percent + "%");
-            }
+
+                if (this.preTime === 0) {
+                    $('#' + progress.file_hash + "_speed" + ' div').html(0.00 + "KB/s");
+                }
+                var currentLoaded = progress.loaded;
+                var currentTime = new Date().getTime();
+
+                if (currentTime - this.preTime >= 1000) {
+                    var speed = (currentLoaded - this.preLoaded) / (currentTime - this.preTime) * 1000;
+                    if (speed < 0) {
+                        speed = 0
+                    }
+                    $('#' + progress.file_hash + "_speed" + ' div').html((speed / 1024).toFixed(2) + "KB/s");
+                    this.preTime = currentTime;
+                    this.preLoaded = currentLoaded;
+                }
+            }.bind(this)
         };
     }
 
@@ -87,7 +105,7 @@ export default class UploadPanel extends React.Component {
 
     //移除文件 终止上传
     removeFile(file) {
-        CSClient.stopUpload(file);
+        CSClient.stop(file);
 
         //重新渲染进度界面
         var filesList = this.state.files;

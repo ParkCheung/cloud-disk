@@ -8,23 +8,30 @@ import CsmngToolBar from './CsmngToolBar.js';
 import DentryListPanel from './DentryListPanel.js';
 import CsmngFooter from './CsmngFooter.js';
 import UploadPanel from './UploadPanel.js';
+import CsmngDialog from './CsmngDialog.js';
+import CsmngInfo from './CsmngInfo.js';
 
 class App extends React.Component {
     constructor(props) {
         super(props);
+        this.confirmed = false;
 
         this.state = {
             currentPath: "/csample",
             selectItems: [],
             showUploadPanel: false,
+            showDialog: false,
             operate: "",
             updateAt: 0,
+            error: "",
+            errorType: ""
         }
     }
 
     //监控工具栏点击事件
     onOperateChange(operate) {
         var url;
+        var _self = this;
         switch (operate) {
             case "upload":
             case "upload_folder":
@@ -43,22 +50,34 @@ class App extends React.Component {
                 window.open(url);
                 break;
             case "delete":
-                var deletePaths = [];
-                for (var i = 0; i < this.state.selectItems.length; i++) {
-                    deletePaths.push(this.state.selectItems[i].path);
-                }
-                var body = {
-                    path: this.state.currentPath,
-                    paths: deletePaths
-                };
-                url = "http://" + Content.CSHOST + "/v0.1/dentries/actions/delete?session=" + Content.SESSION;
-                CSHttpClient.doPatchRequest(url, JSON.stringify(body), null, function () {
+                if (!this.confirmed) {
+                    //弹出确认窗口
                     this.setState({
-                        updateAt: new Date().getTime()
+                        showDialog: true,
+                        operate: operate
                     });
-                }, function (error) {
-                    console.log(error);
-                });
+                } else {
+                    this.confirmed = false;
+                    var deletePaths = [];
+                    for (var i = 0; i < this.state.selectItems.length; i++) {
+                        deletePaths.push(this.state.selectItems[i].path);
+                    }
+                    var body = {
+                        parent_path: this.state.currentPath,
+                        paths: deletePaths
+                    };
+                    url = "http://" + Content.CSHOST + "/v0.1/dentries/actions/delete?session=" + Content.SESSION + "&fromPath=true";
+                    CSHttpClient.doPatchRequest(url, JSON.stringify(body), null, function () {
+                        _self.setState({
+                            updateAt: new Date().getTime()
+                        });
+                    }, function () {
+                        _self.setState({
+                            error: "批量删除文件失败！",
+                            errorType: "error",
+                        });
+                    });
+                }
                 break;
         }
     }
@@ -91,6 +110,26 @@ class App extends React.Component {
         });
     }
 
+    //已操作完对话框
+    onCloseDialog(confirmed) {
+        this.confirmed = confirmed;
+        this.setState({
+            showDialog: false
+        });
+        //点击确认
+        if (confirmed) {
+            this.onOperateChange(this.state.operate);
+        }
+    }
+
+    //清除error信息
+    onClearError() {
+        this.setState({
+            error: "",
+            errorType: "",
+        });
+    }
+
     render() {
         return (
             <div>
@@ -104,6 +143,10 @@ class App extends React.Component {
                              closeUploadPanel={this.closeUploadPanel.bind(this)}
                              currentPath={this.state.currentPath}
                              uploadSuccess={this.onUploadSuccess.bind(this)}/>
+                <CsmngDialog show={this.state.showDialog} operate={this.state.operate}
+                             onCloseDialog={this.onCloseDialog.bind(this)}/>
+                <CsmngInfo text={this.state.error} errorType={this.state.errorType}
+                           onClearError={this.onClearError.bind(this)}/>
                 <DentryListPanel
                     currentPath={this.state.currentPath}
                     onCurrentPathChange={this.onChangePath.bind(this)}

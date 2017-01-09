@@ -15,18 +15,26 @@ export default class CsmngToolBar extends React.Component {
         var items = [
             {"id": "upload", "name": "上传", "className": "icon", "available": true},
             {"id": "upload_folder", "name": "上传文件夹", "className": "big_icon", "available": true},
-            {"id": "download", "name": "下载", "className": "icon", "available": true},
+            {"id": "download", "name": "下载", "className": "icon", "available": false},
             {"id": "create_folder", "name": "新建文件夹", "className": "icon", "available": true},
-            {"id": "move", "name": "移动", "className": "icon", "available": true},
-            {"id": "delete", "name": "删除", "className": "icon", "available": true},
-            {"id": "rename", "name": "重命名", "className": "icon", "available": true},
+            {"id": "move", "name": "移动", "className": "icon", "available": false},
+            {"id": "delete", "name": "删除", "className": "icon", "available": false},
+            {"id": "rename", "name": "重命名", "className": "icon", "available": false},
             {"id": "recycle", "name": "回收站", "className": "icon", "available": true}
         ];
 
         //不支持批量的操作项
-        if (this.props.selectItems && this.props.selectItems.length > 1) {
-            items[2].available = false;
-            items[6].available = false;
+        if (this.props.selectItems) {
+
+            if(this.props.selectItems.length === 1){
+                items[2].available = true;
+                items[6].available = true;
+            }
+
+            if (this.props.selectItems.length >= 1){
+                items[4].available = true;
+                items[5].available = true;
+            }
         }
 
         return (
