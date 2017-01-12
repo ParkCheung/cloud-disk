@@ -69,7 +69,8 @@ class App extends React.Component {
                     url = "http://" + Content.CSHOST + "/v0.1/dentries/actions/delete?session=" + Content.SESSION + "&fromPath=true";
                     CSHttpClient.doPatchRequest(url, JSON.stringify(body), null, function () {
                         _self.setState({
-                            updateAt: new Date().getTime()
+                            updateAt: new Date().getTime(),
+                            selectItems:[]
                         });
                     }, function () {
                         _self.setState({
@@ -79,7 +80,34 @@ class App extends React.Component {
                     });
                 }
                 break;
+            case "create_folder":
+                document.getElementById("create_folder_dentry").style.display = "";
+                $("#new_dentry_name").focus();
+                $("#new_dentry_name").select();
+                break
         }
+    }
+
+    onCreateDentry(name){
+        var body = {
+            path: this.state.currentPath,
+            name: name
+        };
+        var _self = this;
+        var url = "http://" + Content.CSHOST + "/v0.1/dentries?session=" + Content.SESSION;
+        CSHttpClient.doPostRequest(url, JSON.stringify(body), {}, function () {
+            document.getElementById("create_folder_dentry").style.display = "none";
+            document.getElementById("new_dentry_name").value = "新建文件夹";
+            _self.setState({
+                updateAt: new Date().getTime()
+            });
+
+        }, function () {
+            _self.setState({
+                error: "创建目录失败！",
+                errorType: "error",
+            });
+        });
     }
 
     //关闭上传面板
@@ -151,6 +179,7 @@ class App extends React.Component {
                     currentPath={this.state.currentPath}
                     onCurrentPathChange={this.onChangePath.bind(this)}
                     onSelectChange={this.onChangeSelect.bind(this)}
+                    onCreateDentry={this.onCreateDentry.bind(this)}
                     updateAt={this.state.updateAt}/>
                 <CsmngFooter/>
             </div>

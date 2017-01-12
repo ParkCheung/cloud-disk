@@ -25,7 +25,6 @@ export default class DentryDetail extends React.Component {
         return quotient.toFixed(2) + " " + unitArr[index];
     }
 
-
     static getDentryImage(type, ext) {
         var iconPath;
         if (type == 0) {
@@ -84,15 +83,18 @@ export default class DentryDetail extends React.Component {
         return date.getFullYear() + "-" + (date.getMonth() + 1 >= 10 ? date.getMonth() + 1 : "0" + (date.getMonth() + 1)) + "-" + (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) + " " + (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ":" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) + ":" + (date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds());
     }
 
-
-    handleDentryClick(){
-        this.props.onClick(this.state)
+    handleClick(type){
+        if(type === "dentry"){
+            this.props.onClick(this.state)
+        }else {
+            this.props.onCheckClick(this.state)
+        }
     }
 
-    handleCheckClick(){
-        this.props.onCheckClick(this.state)
+    handleBlur(){
+        var name = React.findDOMNode(this.refs.newName).value;
+        this.props.onCreateDentry(name);
     }
-
 
     render() {
         var item = this.props.dentry;
@@ -105,17 +107,21 @@ export default class DentryDetail extends React.Component {
             size = DentryDetail.convertSize(size);
         }
         var iconAddr = DentryDetail.getDentryImage(item.type, ext);
-
+        var display = this.props.display && this.props.display === "none"?"none":"";
         return (
-            <tr className="dentry_detail">
-                <td className="list_td"><input type="checkbox" checked={this.props.checked} onClick={this.handleCheckClick.bind(this)}/>
+            <tr className="dentry_detail" style={{display:display}} id={display==="none"?"create_folder_dentry":""}>
+                <td className="list_td"><input type="checkbox" checked={this.props.checked} onClick={this.handleClick.bind(this,"checkbox")}/>
                 </td>
                 <td className="list_td">
                     <div className="list_dentry_name"><img className="dentry_icon"
                                                            src={iconAddr}/>
                     </div>
                     <div className="list_link"/>
-                    <label className="dentry_name" onClick={this.handleDentryClick.bind(this)}>{item.name}</label>
+                    {
+                        display === "none"?<input className="new_dentry_name" type="text" defaultValue={item.name} id="new_dentry_name"
+                                                  maxLength="128" required="required" ref="newName" onBlur={this.handleBlur.bind(this)}/>:
+                            <label className="dentry_name" onClick={this.handleClick.bind(this,"dentry")} id={display==="none"?"create_folder_name":item.dentry_id}>{item.name}</label>
+                    }
                     <div className="list_link"/>
                     <a className="btn-single-delete"><img src="build/img/recycle.png"/></a>
                     <a className="btn-single-download"><img src="build/img/download2.png"/></a>

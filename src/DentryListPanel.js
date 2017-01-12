@@ -95,7 +95,6 @@ export default class DentryListPanel extends React.Component {
         this.props.onSelectChange(this.selectItems);
     }
 
-
     //获取上一页
     pagePre() {
         var url = "http://" + Content.CSHOST + "/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+gt+" + this.pageTop + "&$limit=16&$orderby=updateAt+Asc&session=" + Content.SESSION;
@@ -121,6 +120,12 @@ export default class DentryListPanel extends React.Component {
         var length = this.state.data.length;
         var selectAll = length > 0 && this.selectItems.length === length;
 
+        var newFolder = {
+            name:"新建文件夹",
+            type:0,
+            update_at:new Date().getTime()
+        };
+
         return (
             <div className="content_container list_mode_div">
                 <div className="wrap" style={{float: "left"}}>
@@ -135,6 +140,7 @@ export default class DentryListPanel extends React.Component {
                             <td className="list_td" style={{width: "60px"}}>大小</td>
                             <td className="list_td" style={{width: "150px"}}>修改日期</td>
                         </tr>
+                        <DentryDetail dentry={newFolder} checked={false} display="none" onCreateDentry={this.props.onCreateDentry.bind(this)}/>
                         {
                             this.state.data.map(function (item) {
                                 if (offset === 0) {
@@ -145,7 +151,6 @@ export default class DentryListPanel extends React.Component {
                                     offset = 0;
                                 }
                                 offset++;
-
                                 var checked = this.selectItems.indexOf(item) !== -1;
                                 return <DentryDetail onClick={this.handleItemClick.bind(this, item)}
                                                      onCheckClick={this.handleCheckClick.bind(this, item)}
