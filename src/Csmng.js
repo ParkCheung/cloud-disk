@@ -70,7 +70,7 @@ class App extends React.Component {
                     CSHttpClient.doPatchRequest(url, JSON.stringify(body), null, function () {
                         _self.setState({
                             updateAt: new Date().getTime(),
-                            selectItems:[]
+                            selectItems: []
                         });
                     }, function () {
                         _self.setState({
@@ -84,11 +84,16 @@ class App extends React.Component {
                 document.getElementById("create_folder_dentry").style.display = "";
                 $("#new_dentry_name").focus();
                 $("#new_dentry_name").select();
-                break
+                break;
+            case "rename":
+                this.setState({
+                    updateAt: -1
+                });
+                break;
         }
     }
 
-    onCreateDentry(name){
+    onCreateDentry(name) {
         var body = {
             path: this.state.currentPath,
             name: name

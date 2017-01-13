@@ -85,19 +85,20 @@ export default class DentryDetail extends React.Component {
 
     handleClick(type){
         if(type === "dentry"){
-            this.props.onClick(this.state)
+            this.props.onItemClick(this.state);
         }else {
-            this.props.onCheckClick(this.state)
+            this.props.onCheckClick(this.state);
         }
     }
 
     handleBlur(){
         var name = React.findDOMNode(this.refs.newName).value;
-        this.props.onCreateDentry(name);
+        this.props.createDentry(name);
     }
 
     render() {
         var item = this.props.dentry;
+        var nodeType = this.props.nodeType;
         var size = "-";
         var ext = "";
         var updateAt = DentryDetail.formatDate(item.update_at);
@@ -118,7 +119,7 @@ export default class DentryDetail extends React.Component {
                     </div>
                     <div className="list_link"/>
                     {
-                        display === "none"?<input className="new_dentry_name" type="text" defaultValue={item.name} id="new_dentry_name"
+                        nodeType === "input"?<input className="new_dentry_name" type="text" defaultValue={item.name} id="new_dentry_name"
                                                   maxLength="128" required="required" ref="newName" onBlur={this.handleBlur.bind(this)}/>:
                             <label className="dentry_name" onClick={this.handleClick.bind(this,"dentry")} id={display==="none"?"create_folder_name":item.dentry_id}>{item.name}</label>
                     }

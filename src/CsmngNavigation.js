@@ -6,10 +6,23 @@ export default class CsmngNavigation extends React.Component {
 
     constructor(props) {
         super(props);
+        this.states = {
+            currentPath : "",
+        }
     }
 
     handleClick(currentPath){
         this.props.onClick(currentPath);
+
+        this.setState({
+            currentPath :currentPath
+        })
+    }
+
+    componentWillReceiveProps(nextProps){
+        this.setState({
+            currentPath :nextProps.currentPath
+        })
     }
 
     render() {
