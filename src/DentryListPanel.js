@@ -153,7 +153,7 @@ export default class DentryListPanel extends React.Component {
     //组件初次加载
     componentWillMount() {
         this.currentPath = this.props.currentPath;
-        var url = "http://" + Content.CSHOST + "/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+gt+0&$limit=16&$orderby=updateAt+Desc&session=";
+        var url = "http://" + Content.CSHOST + "/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+gt+0&$limit=16&$orderby=updateAt+Desc&session="+ Content.SESSION;
         this.getList(url);
     }
 
