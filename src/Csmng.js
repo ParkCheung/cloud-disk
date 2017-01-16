@@ -82,12 +82,19 @@ class App extends React.Component {
                 break;
             case "create_folder":
                 document.getElementById("create_folder_dentry").style.display = "";
-                $("#new_dentry_name").focus();
-                $("#new_dentry_name").select();
+                var dom = $("#new_dentry_name");
+                dom.focus();
+                dom.select();
                 break;
             case "rename":
+                //重命名 需要将labe转换为input
                 this.setState({
                     updateAt: -1
+                },function () {
+                    var item = _self.state.selectItems[0];
+                    var id = "#" + item.dentry_id;
+                    $(id).focus();
+                    document.getElementById(item.dentry_id).setSelectionRange(0, item.name.lastIndexOf("."));
                 });
                 break;
         }
@@ -155,6 +162,14 @@ class App extends React.Component {
         }
     }
 
+    //显示错误
+    onShowErrorMsg(msg){
+        this.setState({
+            error: msg.error,
+            errorType: msg.errorType,
+        });
+    }
+
     //清除error信息
     onClearError() {
         this.setState({
@@ -185,6 +200,7 @@ class App extends React.Component {
                     onCurrentPathChange={this.onChangePath.bind(this)}
                     onSelectChange={this.onChangeSelect.bind(this)}
                     onCreateDentry={this.onCreateDentry.bind(this)}
+                    onShowErrorMsg={this.onShowErrorMsg.bind(this)}
                     updateAt={this.state.updateAt}/>
                 <CsmngFooter/>
             </div>

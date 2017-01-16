@@ -25,8 +25,8 @@ export default class CsmngToolBar extends React.Component {
 
         //不支持批量的操作项
         if (this.props.selectItems) {
-
-            if(this.props.selectItems.length === 1){
+            //只支持单个操作文件
+            if(this.props.selectItems.length === 1 && this.props.selectItems[0].type !==0){
                 items[2].available = true;
                 items[6].available = true;
             }

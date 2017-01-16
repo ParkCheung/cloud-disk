@@ -83,15 +83,15 @@ export default class DentryDetail extends React.Component {
         return date.getFullYear() + "-" + (date.getMonth() + 1 >= 10 ? date.getMonth() + 1 : "0" + (date.getMonth() + 1)) + "-" + (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) + " " + (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ":" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) + ":" + (date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds());
     }
 
-    handleClick(type){
-        if(type === "dentry"){
+    handleClick(type) {
+        if (type === "dentry") {
             this.props.onItemClick(this.state);
-        }else {
+        } else {
             this.props.onCheckClick(this.state);
         }
     }
 
-    handleBlur(){
+    handleBlur() {
         var name = React.findDOMNode(this.refs.newName).value;
         this.props.createDentry(name);
     }
@@ -108,10 +108,12 @@ export default class DentryDetail extends React.Component {
             size = DentryDetail.convertSize(size);
         }
         var iconAddr = DentryDetail.getDentryImage(item.type, ext);
-        var display = this.props.display && this.props.display === "none"?"none":"";
+        var display = this.props.display && this.props.display === "none" ? "none" : "";
         return (
-            <tr className="dentry_detail" style={{display:display}} id={display==="none"?"create_folder_dentry":""}>
-                <td className="list_td"><input type="checkbox" checked={this.props.checked} onClick={this.handleClick.bind(this,"checkbox")}/>
+            <tr className="dentry_detail" style={{display: display}}
+                id={display === "none" ? "create_folder_dentry" : ""}>
+                <td className="list_td"><input type="checkbox" checked={this.props.checked}
+                                               onClick={this.handleClick.bind(this, "checkbox")}/>
                 </td>
                 <td className="list_td">
                     <div className="list_dentry_name"><img className="dentry_icon"
@@ -119,9 +121,12 @@ export default class DentryDetail extends React.Component {
                     </div>
                     <div className="list_link"/>
                     {
-                        nodeType === "input"?<input className="new_dentry_name" type="text" defaultValue={item.name} id="new_dentry_name"
-                                                  maxLength="128" required="required" ref="newName" onBlur={this.handleBlur.bind(this)}/>:
-                            <label className="dentry_name" onClick={this.handleClick.bind(this,"dentry")} id={display==="none"?"create_folder_name":item.dentry_id}>{item.name}</label>
+                        nodeType === "input" ?
+                            <input className="new_dentry_name" type="text" defaultValue={item.name} id={item.dentry_id}
+                                   maxLength="128" required="required" ref="newName"
+                                   onBlur={this.handleBlur.bind(this)}/> :
+                            <label className="dentry_name" onClick={this.handleClick.bind(this, "dentry")}
+                                   id={item.dentry_id}>{item.name}</label>
                     }
                     <div className="list_link"/>
                     <a className="btn-single-delete"><img src="build/img/recycle.png"/></a>
