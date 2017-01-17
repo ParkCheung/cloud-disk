@@ -5,6 +5,14 @@
 import React from 'react';
 export default class DentryDetail extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.item = {};
+        this.state = {
+            mouseOver: false
+        }
+    }
+
 
     static convertSize(value) {
         if (value === "-") {
@@ -91,13 +99,30 @@ export default class DentryDetail extends React.Component {
         }
     }
 
+    //处理鼠标覆盖事件
+    handleMouseOver() {
+        this.setState({
+            mouseOver: true
+        })
+    }
+
+    handleMouseLeave() {
+        this.setState({
+            mouseOver: false
+        })
+    }
+
+    //处理鼠标移除事件
     handleBlur() {
         var name = React.findDOMNode(this.refs.newName).value;
         this.props.createDentry(name);
     }
 
     render() {
-        var item = this.props.dentry;
+        if (!this.item.dentry_id) {
+            this.item = this.props.dentry;
+        }
+        var item = this.item;
         var nodeType = this.props.nodeType;
         var size = "-";
         var ext = "";
@@ -110,8 +135,9 @@ export default class DentryDetail extends React.Component {
         var iconAddr = DentryDetail.getDentryImage(item.type, ext);
         var display = this.props.display && this.props.display === "none" ? "none" : "";
         return (
-            <tr className="dentry_detail" style={{display: display}}
-                id={display === "none" ? "create_folder_dentry" : ""}>
+            <tr style={{display: display, backgroundColor: this.state.mouseOver ? "#eee" : ""}}
+                id={display === "none" ? "create_folder_dentry" : ""} onMouseOver={this.handleMouseOver.bind(this)}
+                onMouseLeave={this.handleMouseLeave.bind(this)}>
                 <td className="list_td"><input type="checkbox" checked={this.props.checked}
                                                onClick={this.handleClick.bind(this, "checkbox")}/>
                 </td>

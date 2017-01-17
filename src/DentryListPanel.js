@@ -55,12 +55,6 @@ export default class DentryListPanel extends React.Component {
             }
             this.setState({
                 data: result.items
-            },function () {
-                var msg = {
-                    error: "获取列表失败！",
-                    errorType: "error",
-                };
-                this.props.onShowErrorMsg(msg);
             });
         }.bind(this));
     }
@@ -97,7 +91,7 @@ export default class DentryListPanel extends React.Component {
         //文件夹 获取列表
         if (item.type === 0) {
             this.setState({
-               data:[]
+                data: []
             });
             this.props.onCurrentPathChange(item.path);
         } else {
@@ -153,7 +147,7 @@ export default class DentryListPanel extends React.Component {
     //组件初次加载
     componentWillMount() {
         this.currentPath = this.props.currentPath;
-        var url = "http://" + Content.CSHOST + "/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+gt+0&$limit=16&$orderby=updateAt+Desc&session="+ Content.SESSION;
+        var url = "http://" + Content.CSHOST + "/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+gt+0&$limit=16&$orderby=updateAt+Desc&session=" + Content.SESSION;
         this.getList(url);
     }
 
@@ -163,8 +157,8 @@ export default class DentryListPanel extends React.Component {
         var offset = 0;
         var length = this.state.data.length;
         var selectAll = length > 0 && this.selectItems.length === length;
-        if(length <= 0){
-            return(<div></div>);
+        if (length <= 0) {
+            return (<div></div>);
         }
 
         var newFolder = {
