@@ -22,6 +22,9 @@ export default class DentryListPanel extends React.Component {
     }
 
     getList(url, direction) {
+        this.setState({
+            data: []
+        });
         $.get(url, function (result) {
             if (result.items.length > 15) {
                 this.hasNextPage = true;
@@ -110,7 +113,6 @@ export default class DentryListPanel extends React.Component {
     onDeleteDentry(item){
         var items = [];
         items.push(item);
-        debugger;
         this.props.onDeleteDentry(items);
     }
 
@@ -141,9 +143,6 @@ export default class DentryListPanel extends React.Component {
     //组件接收到新的props
     componentWillReceiveProps(nextProps) {
         if (nextProps.currentPath !== this.currentPath || nextProps.updateAt > this.updateAt) {
-            this.setState({
-                data: []
-            });
             this.currentPath = nextProps.currentPath;
             this.updateAt = nextProps.updateAt;
             var url = "http://" + Content.CSHOST + "/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+gt+0&$limit=16&$orderby=updateAt+Desc&session=" + Content.SESSION;
