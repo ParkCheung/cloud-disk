@@ -15,7 +15,6 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.confirmed = false;
-
         this.state = {
             currentPath: "/csample",
             selectItems: [],
@@ -25,6 +24,42 @@ class App extends React.Component {
             updateAt: 0,
             error: "",
             errorType: ""
+        }
+    }
+
+    deleteDentry(items) {
+
+        this.setState({
+            selectItems : items
+        });
+        if (!this.confirmed) {
+            //弹出确认窗口
+            this.setState({
+                showDialog: true,
+                operate: "delete"
+            });
+        } else {
+            this.confirmed = false;
+            var deletePaths = [];
+            for (var i = 0; i < items.length; i++) {
+                deletePaths.push(items[i].path);
+            }
+            var body = {
+                parent_path: this.state.currentPath,
+                paths: deletePaths
+            };
+            var url = "http://" + Content.CSHOST + "/v0.1/dentries/actions/delete?session=" + Content.SESSION + "&fromPath=true";
+            var _self = this;
+            CSHttpClient.doPatchRequest(url, JSON.stringify(body), null, function () {
+                _self.setState({
+                    updateAt: new Date().getTime(),
+                });
+            }, function () {
+                _self.setState({
+                    error: "删除文件失败！",
+                    errorType: "error",
+                });
+            });
         }
     }
 
@@ -50,35 +85,7 @@ class App extends React.Component {
                 window.open(url);
                 break;
             case "delete":
-                if (!this.confirmed) {
-                    //弹出确认窗口
-                    this.setState({
-                        showDialog: true,
-                        operate: operate
-                    });
-                } else {
-                    this.confirmed = false;
-                    var deletePaths = [];
-                    for (var i = 0; i < this.state.selectItems.length; i++) {
-                        deletePaths.push(this.state.selectItems[i].path);
-                    }
-                    var body = {
-                        parent_path: this.state.currentPath,
-                        paths: deletePaths
-                    };
-                    url = "http://" + Content.CSHOST + "/v0.1/dentries/actions/delete?session=" + Content.SESSION + "&fromPath=true";
-                    CSHttpClient.doPatchRequest(url, JSON.stringify(body), null, function () {
-                        _self.setState({
-                            updateAt: new Date().getTime(),
-                            selectItems: []
-                        });
-                    }, function () {
-                        _self.setState({
-                            error: "批量删除文件失败！",
-                            errorType: "error",
-                        });
-                    });
-                }
+                this.deleteDentry(this.state.selectItems);
                 break;
             case "create_folder":
                 document.getElementById("create_folder_dentry").style.display = "";
@@ -90,7 +97,7 @@ class App extends React.Component {
                 //重命名 需要将labe转换为input
                 this.setState({
                     updateAt: -1
-                },function () {
+                }, function () {
                     var item = _self.state.selectItems[0];
                     var id = "#" + item.dentry_id;
                     $(id).focus();
@@ -163,7 +170,7 @@ class App extends React.Component {
     }
 
     //显示错误
-    onShowErrorMsg(msg){
+    onShowErrorMsg(msg) {
         this.setState({
             error: msg.error,
             errorType: msg.errorType,
@@ -198,6 +205,7 @@ class App extends React.Component {
                 <DentryListPanel
                     currentPath={this.state.currentPath}
                     onCurrentPathChange={this.onChangePath.bind(this)}
+                    onDeleteDentry={this.deleteDentry.bind(this)}
                     onSelectChange={this.onChangeSelect.bind(this)}
                     onCreateDentry={this.onCreateDentry.bind(this)}
                     onShowErrorMsg={this.onShowErrorMsg.bind(this)}

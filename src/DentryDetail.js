@@ -3,13 +3,15 @@
  * Created by Administrator on 2016/12/12.
  */
 import React from 'react';
+import DownloadLinkDialog from './DownloadLinkDialog';
+
 export default class DentryDetail extends React.Component {
 
     constructor(props) {
         super(props);
-        this.item = {};
         this.state = {
-            mouseOver: false
+            mouseOver: false,
+            display:this.props.display
         }
     }
 
@@ -105,11 +107,31 @@ export default class DentryDetail extends React.Component {
             mouseOver: true
         })
     }
-
+    //处理鼠标移除事件
     handleMouseLeave() {
         this.setState({
             mouseOver: false
         })
+    }
+
+    //显示下载地址
+    showDownloadLink(item){
+        React.render(<DownloadLinkDialog dentry={item}/>, document.getElementById('download_link_div'));
+    }
+
+    //下载文件
+    downloadFile(item){
+        //文件 直接下载
+        var url = "http://" + Content.CSHOST + "/v0.1/download/actions/direct?path=" + encodeURIComponent(item.path)+"&attachment=true";
+        if (item.scope === 0) {
+            url += "&session=" + Content.SESSION;
+        }
+        window.open(url);
+    }
+
+    //删除文件
+    deleteDentry(){
+       this.props.deleteDentry();
     }
 
     //处理鼠标移除事件
@@ -119,10 +141,7 @@ export default class DentryDetail extends React.Component {
     }
 
     render() {
-        if (!this.item.dentry_id) {
-            this.item = this.props.dentry;
-        }
-        var item = this.item;
+        var item = this.props.dentry;
         var nodeType = this.props.nodeType;
         var size = "-";
         var ext = "";
@@ -133,7 +152,7 @@ export default class DentryDetail extends React.Component {
             size = DentryDetail.convertSize(size);
         }
         var iconAddr = DentryDetail.getDentryImage(item.type, ext);
-        var display = this.props.display && this.props.display === "none" ? "none" : "";
+        var display = this.state.display && this.state.display === "none" ? "none" : "";
         return (
             <tr style={{display: display, backgroundColor: this.state.mouseOver ? "#eee" : ""}}
                 id={display === "none" ? "create_folder_dentry" : ""} onMouseOver={this.handleMouseOver.bind(this)}
@@ -155,9 +174,13 @@ export default class DentryDetail extends React.Component {
                                    id={item.dentry_id}>{item.name}</label>
                     }
                     <div className="list_link"/>
-                    <a className="btn-single-delete"><img src="build/img/recycle.png"/></a>
-                    <a className="btn-single-download"><img src="build/img/download2.png"/></a>
-                    <a className="btn-download-link"><img src="build/img/link.png"/></a>
+                    <a className="btn-single-delete" style={{display: this.state.mouseOver ? "" : "none"}}><img
+                        src="build/img/recycle.png" onClick={this.deleteDentry.bind(this)}/></a>
+                    <a className="btn-single-download"
+                       style={{display: this.state.mouseOver && item.type !== 0 ? "" : "none"}}><img
+                        src="build/img/download2.png" onClick={this.downloadFile.bind(this,item)}/></a>
+                    <a className="btn-download-link" style={{display: this.state.mouseOver && item.type !== 0 ? "" : "none"}} onClick={this.showDownloadLink.bind(this,item)}><img
+                        src="build/img/link.png"/></a>
 
                 </td>
                 <td className="list_td"><input type="checkbox" checked={item.scope == 1}

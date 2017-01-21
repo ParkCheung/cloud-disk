@@ -90,13 +90,10 @@ export default class DentryListPanel extends React.Component {
         var url;
         //文件夹 获取列表
         if (item.type === 0) {
-            this.setState({
-                data: []
-            });
             this.props.onCurrentPathChange(item.path);
         } else {
             //文件 直接下载
-            url = "http://" + Content.CSHOST + "/v0.1/download?path=" + encodeURIComponent(item.path);
+            url = "http://" + Content.CSHOST + "/v0.1/download/actions/direct?path=" + encodeURIComponent(item.path);
             if (item.scope === 0) {
                 url += "&session=" + Content.SESSION;
             }
@@ -108,6 +105,13 @@ export default class DentryListPanel extends React.Component {
     handleCheckAllClick() {
         this.selectItems = this.selectItems.length < this.state.data.length ? this.state.data : [];
         this.props.onSelectChange(this.selectItems);
+    }
+
+    onDeleteDentry(item){
+        var items = [];
+        items.push(item);
+        debugger;
+        this.props.onDeleteDentry(items);
     }
 
 
@@ -137,6 +141,9 @@ export default class DentryListPanel extends React.Component {
     //组件接收到新的props
     componentWillReceiveProps(nextProps) {
         if (nextProps.currentPath !== this.currentPath || nextProps.updateAt > this.updateAt) {
+            this.setState({
+                data: []
+            });
             this.currentPath = nextProps.currentPath;
             this.updateAt = nextProps.updateAt;
             var url = "http://" + Content.CSHOST + "/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+gt+0&$limit=16&$orderby=updateAt+Desc&session=" + Content.SESSION;
@@ -169,61 +176,64 @@ export default class DentryListPanel extends React.Component {
         };
 
         return (
-            <div className="content_container list_mode_div">
-                <div className="wrap" style={{float: "left"}}>
-                    <table id="list_table" className="list_table">
-                        <tr id="list_title" className="list_title">
-                            <td className="list_td" style={{width: " 30px"}}><input type="checkbox"
-                                                                                    checked={selectAll}
-                                                                                    onClick={this.handleCheckAllClick.bind(this)}/>
-                            </td>
-                            <td className="list_td_name" style={{width: "auto"}}>文件名</td>
-                            <td className="list_td" style={{width: "30px"}}>公开</td>
-                            <td className="list_td" style={{width: "60px"}}>大小</td>
-                            <td className="list_td" style={{width: "150px"}}>修改日期</td>
-                        </tr>
-                        <DentryDetail dentry={newFolder} checked={false} display="none" nodeType="input"
-                                      createDentry={this.props.onCreateDentry.bind(this)}/>
-                        {
-                            this.state.data.map(function (item) {
-                                if (offset === 0) {
-                                    this.pageTop = item.update_at;
-                                }
-                                if (offset === length - 1) {
-                                    this.pageButtom = item.update_at;
-                                    offset = 0;
-                                }
-                                offset++;
-                                var checked = this.selectItems.indexOf(item) !== -1;
-                                return <DentryDetail onItemClick={this.handleItemClick.bind(this, item)}
-                                                     onCheckClick={this.handleCheckClick.bind(this, item)}
-                                                     createDentry={this.onRenameDentry.bind(this)}
-                                                     dentry={item}
-                                                     checked={checked}
-                                                     nodeType={this.props.updateAt === -1 && this.selectItems.indexOf(item) != -1 ? "input" : ""}
-                                />
-                            }.bind(this))
-                        }
-                    </table>
-                    <div id="page_turning" className="page_turning">
-                        <div className="wrap page_div">
+                <div className="content_container list_mode_div">
+                    <div className="wrap" style={{float: "left"}}>
+                        <table id="list_table" className="list_table">
+                            <tr id="list_title" className="list_title">
+                                <td className="list_td" style={{width: " 30px"}}><input type="checkbox"
+                                                                                        checked={selectAll}
+                                                                                        onClick={this.handleCheckAllClick.bind(this)}/>
+                                </td>
+                                <td className="list_td_name" style={{width: "auto"}}>文件名</td>
+                                <td className="list_td" style={{width: "30px"}}>公开</td>
+                                <td className="list_td" style={{width: "60px"}}>大小</td>
+                                <td className="list_td" style={{width: "150px"}}>修改日期</td>
+                            </tr>
+                            <DentryDetail dentry={newFolder} checked={false} display="none" nodeType="input"
+                                          createDentry={this.props.onCreateDentry.bind(this)}/>
                             {
-                                this.hasNextPage === true ?
-                                    <div className="page_button"><a id="next_list" className="btn1 btn_dialog"
-                                                                    onClick={this.pageNext.bind(this)}>下一页</a>
-                                    </div> : <div></div>
+                                this.state.data.map(function (item) {
+                                    if (offset === 0) {
+                                        this.pageTop = item.update_at;
+                                    }
+                                    if (offset === length - 1) {
+                                        this.pageButtom = item.update_at;
+                                        offset = 0;
+                                    }
+                                    offset++;
+                                    var checked = this.selectItems.indexOf(item) !== -1;
+                                    return <DentryDetail onItemClick={this.handleItemClick.bind(this, item)}
+                                                         onCheckClick={this.handleCheckClick.bind(this, item)}
+                                                         createDentry={this.onRenameDentry.bind(this)}
+                                                         deleteDentry={this.onDeleteDentry.bind(this,item)}
+                                                         dentry={item}
+                                                         checked={checked}
+                                                         nodeType={this.props.updateAt === -1 && this.selectItems.indexOf(item) != -1 ? "input" : ""}
+                                    />
+                                }.bind(this))
                             }
-                            {
-                                this.hasPrePage === true ?
-                                    <div className="page_button"><a id="pre_list" className="btn1 btn_dialog"
-                                                                    onClick={this.pagePre.bind(this)}>上一页</a>
-                                    </div> : <div></div>
-                            }
+                        </table>
+                        <div id="page_turning" className="page_turning">
+                            <div className="wrap page_div">
+                                {
+                                    this.hasNextPage === true ?
+                                        <div className="page_button"><a id="next_list" className="btn1 btn_dialog"
+                                                                        onClick={this.pageNext.bind(this)}>下一页</a>
+                                        </div> : <div></div>
+                                }
+                                {
+                                    this.hasPrePage === true ?
+                                        <div className="page_button"><a id="pre_list" className="btn1 btn_dialog"
+                                                                        onClick={this.pagePre.bind(this)}>上一页</a>
+                                        </div> : <div></div>
+                                }
+                            </div>
                         </div>
                     </div>
-
+                    <div id="download_link_div"></div>
                 </div>
-            </div>
+
+
         );
     }
 
