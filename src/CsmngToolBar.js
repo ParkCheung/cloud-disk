@@ -43,11 +43,11 @@ export default class CsmngToolBar extends React.Component {
                 <div className="wrap">
                     {
                         items.map(function (item) {
-                            var image = "build/img/" + item.id + ".png";
+                            var image = "../build/img/" + item.id + ".png";
                             return <a id={item.id} className={item.available ? "available" : "unavailable"} onClick={this.handleClick.bind(this,item.id)}><img
                                 className={item.className}
                                 src={image}/><label>{item.name}</label><img
-                                src="build/img/u230_line.png" className="separator" alt=""/></a>
+                                src="../build/img/u230_line.png" className="separator" alt=""/></a>
                         }.bind(this))
                     }
                 </div>

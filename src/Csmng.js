@@ -16,7 +16,7 @@ class App extends React.Component {
         super(props);
         this.confirmed = false;
         this.state = {
-            currentPath: "/csample",
+            currentPath: "/" + Content.SERVICENAME,
             selectItems: [],
             showUploadPanel: false,
             showDialog: false,
@@ -48,7 +48,7 @@ class App extends React.Component {
                 parent_path: this.state.currentPath,
                 paths: deletePaths
             };
-            var url = "http://" + Content.CSHOST + "/v0.1/dentries/actions/delete?session=" + Content.SESSION + "&fromPath=true";
+            var url = "http://" + Content.HOST + "/v0.1/dentries/actions/delete?session=" + Content.SESSION + "&fromPath=true";
             var _self = this;
             CSHttpClient.doPatchRequest(url, JSON.stringify(body), null, function () {
                 _self.setState({
@@ -57,7 +57,7 @@ class App extends React.Component {
             }, function () {
                 _self.setState({
                     error: "删除文件失败！",
-                    errorType: "error",
+                    errorType: "error"
                 });
             });
         }
@@ -78,7 +78,7 @@ class App extends React.Component {
             case "download":
                 var dentry = this.state.selectItems[0];
                 //文件 直接下载
-                url = "http://" + Content.CSHOST + "/v0.1/download?path=" + encodeURIComponent(dentry.path);
+                url = "http://" + Content.HOST + "/v0.1/download?path=" + encodeURIComponent(dentry.path);
                 if (dentry.scope === 0) {
                     url += "&session=" + Content.SESSION;
                 }
@@ -113,7 +113,7 @@ class App extends React.Component {
             name: name
         };
         var _self = this;
-        var url = "http://" + Content.CSHOST + "/v0.1/dentries?session=" + Content.SESSION;
+        var url = "http://" + Content.HOST + "/v0.1/dentries?session=" + Content.SESSION;
         CSHttpClient.doPostRequest(url, JSON.stringify(body), {}, function () {
             document.getElementById("create_folder_dentry").style.display = "none";
             document.getElementById("new_dentry_name").value = "新建文件夹";
@@ -181,7 +181,7 @@ class App extends React.Component {
     onClearError() {
         this.setState({
             error: "",
-            errorType: "",
+            errorType: ""
         });
     }
 

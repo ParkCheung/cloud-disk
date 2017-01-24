@@ -70,7 +70,7 @@ export default class DentryListPanel extends React.Component {
             name: newName
         };
         var _self = this;
-        var url = "http://" + Content.CSHOST + "/v0.1/dentries/actions/rename?session=" + Content.SESSION;
+        var url = "http://" + Content.HOST + "/v0.1/dentries/actions/rename?session=" + Content.SESSION;
         CSHttpClient.doPutRequest(url, JSON.stringify(body), {}, function (dentry) {
             var index = _self.state.data.indexOf(_self.selectItems[0]);
             _self.state.data[index].name = dentry.name;
@@ -96,7 +96,7 @@ export default class DentryListPanel extends React.Component {
             this.props.onCurrentPathChange(item.path);
         } else {
             //文件 直接下载
-            url = "http://" + Content.CSHOST + "/v0.1/download/actions/direct?path=" + encodeURIComponent(item.path);
+            url = "http://" + Content.HOST + "/v0.1/download/actions/direct?path=" + encodeURIComponent(item.path);
             if (item.scope === 0) {
                 url += "&session=" + Content.SESSION;
             }
@@ -130,13 +130,13 @@ export default class DentryListPanel extends React.Component {
 
     //获取上一页
     pagePre() {
-        var url = "http://" + Content.CSHOST + "/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+gt+" + this.pageTop + "&$limit=16&$orderby=updateAt+Asc&session=" + Content.SESSION;
+        var url = "http://" + Content.HOST + "/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+gt+" + this.pageTop + "&$limit=16&$orderby=updateAt+Asc&session=" + Content.SESSION;
         this.getList(url, "pre")
     }
 
     //获取下一页
     pageNext() {
-        var url = "http://" + Content.CSHOST + "/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+lt+" + this.pageButtom + "&$limit=16&$orderby=updateAt+Desc&session=" + Content.SESSION;
+        var url = "http://" + Content.HOST + "/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+lt+" + this.pageButtom + "&$limit=16&$orderby=updateAt+Desc&session=" + Content.SESSION;
         this.getList(url, "next")
     }
 
@@ -145,7 +145,7 @@ export default class DentryListPanel extends React.Component {
         if (nextProps.currentPath !== this.currentPath || nextProps.updateAt > this.updateAt) {
             this.currentPath = nextProps.currentPath;
             this.updateAt = nextProps.updateAt;
-            var url = "http://" + Content.CSHOST + "/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+gt+0&$limit=16&$orderby=updateAt+Desc&session=" + Content.SESSION;
+            var url = "http://" + Content.HOST + "/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+gt+0&$limit=16&$orderby=updateAt+Desc&session=" + Content.SESSION;
             this.getList(url);
         }
     }
@@ -153,7 +153,7 @@ export default class DentryListPanel extends React.Component {
     //组件初次加载
     componentWillMount() {
         this.currentPath = this.props.currentPath;
-        var url = "http://" + Content.CSHOST + "/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+gt+0&$limit=16&$orderby=updateAt+Desc&session=" + Content.SESSION;
+        var url = "http://" + Content.HOST + "/v0.1/dentries?path=" + this.currentPath + "&$filter=updateAt+gt+0&$limit=16&$orderby=updateAt+Desc&session=" + Content.SESSION;
         this.getList(url);
     }
 

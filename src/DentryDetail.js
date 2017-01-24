@@ -38,51 +38,51 @@ export default class DentryDetail extends React.Component {
     static getDentryImage(type, ext) {
         var iconPath;
         if (type == 0) {
-            return "build/img/floder_icon.png";
+            return "../build/img/floder_icon.png";
         }
         switch (ext) {
             case ".doc":
             case ".docx":
-                iconPath = "build/img/doc_icon.png";
+                iconPath = "../build/img/doc_icon.png";
                 break;
             case ".exe":
-                iconPath = "build/img/exe_icon.png";
+                iconPath = "../build/img/exe_icon.png";
                 break;
             case ".pdf":
-                iconPath = "build/img/pdf_icon.png";
+                iconPath = "../build/img/pdf_icon.png";
                 break;
             case ".txt":
-                iconPath = "build/img/txt_icon.png";
+                iconPath = "../build/img/txt_icon.png";
                 break;
             case ".ppt":
             case ".pptx":
-                iconPath = "build/img/ppt_icon.png";
+                iconPath = "../build/img/ppt_icon.png";
                 break;
             case ".xls":
             case ".xlsx":
-                iconPath = "build/img/xls_icon.png";
+                iconPath = "../build/img/xls_icon.png";
                 break;
             case ".zip":
             case ".rar":
             case ".gz":
-                iconPath = "build/img/zip_icon.png";
+                iconPath = "../build/img/zip_icon.png";
                 break;
             case ".flv":
             case ".mp3":
             case ".mp4":
             case ".rmvb":
             case ".avi":
-                iconPath = "build/img/vedio_icon.png";
+                iconPath = "../build/img/vedio_icon.png";
                 break;
             case ".jpg":
             case ".png":
             case ".jpeg":
             case ".webp":
             case ".bmp":
-                iconPath = "build/img/image_icon.png";
+                iconPath = "../build/img/image_icon.png";
                 break;
             default :
-                iconPath = "build/img/file_icon.png";
+                iconPath = "../build/img/file_icon.png";
                 break;
         }
         return iconPath;
@@ -122,7 +122,7 @@ export default class DentryDetail extends React.Component {
     //下载文件
     downloadFile(item){
         //文件 直接下载
-        var url = "http://" + Content.CSHOST + "/v0.1/download/actions/direct?path=" + encodeURIComponent(item.path)+"&attachment=true";
+        var url = "http://" + Content.HOST + "/v0.1/download/actions/direct?path=" + encodeURIComponent(item.path)+"&attachment=true";
         if (item.scope === 0) {
             url += "&session=" + Content.SESSION;
         }
@@ -175,12 +175,12 @@ export default class DentryDetail extends React.Component {
                     }
                     <div className="list_link"/>
                     <a className="btn-single-delete" style={{display: this.state.mouseOver ? "" : "none"}}><img
-                        src="build/img/recycle.png" onClick={this.deleteDentry.bind(this)}/></a>
+                        src="../build/img/recycle.png" onClick={this.deleteDentry.bind(this)}/></a>
                     <a className="btn-single-download"
                        style={{display: this.state.mouseOver && item.type !== 0 ? "" : "none"}}><img
-                        src="build/img/download2.png" onClick={this.downloadFile.bind(this,item)}/></a>
+                        src="../build/img/download2.png" onClick={this.downloadFile.bind(this,item)}/></a>
                     <a className="btn-download-link" style={{display: this.state.mouseOver && item.type !== 0 ? "" : "none"}} onClick={this.showDownloadLink.bind(this,item)}><img
-                        src="build/img/link.png"/></a>
+                        src="../build/img/link.png"/></a>
 
                 </td>
                 <td className="list_td"><input type="checkbox" checked={item.scope == 1}

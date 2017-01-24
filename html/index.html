@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>内容服务管理工具</title>
+    <!--<link href="../build/style.css" rel="stylesheet"/>-->
+    <link rel="stylesheet" type="text/css" media="screen" href="../build/css/portal.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../build/css/jquery.fancybox.css">
+
+    <!--    <link rel="stylesheet" type="text/css" media="screen" href="../build/css/progress-bar.css">-->
+    <link rel="stylesheet" href="http://sdp.nd/css/tipsy.css">
+    <link rel="stylesheet" href="../build/css/zTreeStyle.css" type="text/css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../build/css/content.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../build/css/detail.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../build/css/jquery.qtip.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../build/css/font-awesome.min.css">
+    <script src="../build/jquery-2.2.0.min.js"></script>
+    <script src="../build/cs-object-sdk.min.js"></script>
+
+</head>
+<body>
+<div id="app"></div>
+<script src="http://cdn.bootcss.com/react/0.13.3/react.min.js"></script>
+<script>
+    var ENV;
+    var host = location.hostname;
+    switch(host){
+        case "csmng.dev.web.nd":
+            ENV = "DEV";
+            break;
+        case "csmng.debug.web.nd":
+            ENV = "DEBUG";
+            break;
+        case "csmng.beta.web.sdp.101.com":
+            ENV = "PREPRODUCTION";
+            break;
+        case "csmng.web.sdp.101.com":
+            ENV = "PRODUCTION";
+            break;
+        default :
+            ENV = "DEV";
+//            alert("无法识别当前环境！")
+    }
+
+    Content.setEnv(ENV);
+
+    var aQuery = window.location.href.split("?");//取得Get参数
+    var aGET = [];
+    if (aQuery.length > 1) {
+        var aBuf = aQuery[1].split("&");
+        for (var i = 0, iLoop = aBuf.length; i < iLoop; i++) {
+            var aTmp = aBuf[i].split("=");//分离key与Value
+            aGET[aTmp[0]] = aTmp[1];
+        }
+    }
+
+    var path = aGET.path;
+    if(!path){
+        alert("缺少path");
+    }
+
+    path = path.replace("%2F", "/");
+    if (path.lastIndexOf("#") === path.length - 1) {
+        path = path.substring(0, path.length - 1)
+    }
+
+    Content.SERVICENAME = path.split("/")[1];
+    if(!aGET.session){
+        alert("缺少session");
+    }
+    Content.SESSION = aGET.session;
+</script>
+
+<script src="../build/bundle.js"></script>
+</body>
+</html>

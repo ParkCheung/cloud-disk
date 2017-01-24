@@ -31,11 +31,11 @@ export default class Progress extends React.Component {
                                         <div name="progress_bar" className="green"></div>
                                     </div>
                                     <p style={{width: "30px", float: "left", paddingTop: "6px"}}>0%</p>
-                                    <image className="progress_image" src="build/img/delete.png"
+                                    <image className="progress_image" src="../build/img/delete.png"
                                            style={{cursor: "pointer", float: "right", paddingTop: "8px"}}
                                            title="点击取消文件上传" onClick={this.removeFile.bind(this, file)}/>
                                 </td>
-                                <image className="complete" src="build/img/complete.png"
+                                <image className="complete" src="../build/img/complete.png"
                                        style={{float: "right", height: "20px", display: "none"}}/>
                                 <td><label>{DentryDetail.convertSize(file.size)}</label></td>
                                 <td id={file.hash + "_speed"}>

@@ -37,8 +37,8 @@ export default class DownloadLinkDialog extends React.Component {
     render() {
 
         var params = "serviceName=" + Content.SERVICENAME + "&attachment=true";
-        var idLink = "http://" + Content.CSHOST + "/v0.1/download/actions/direct?dentryId=" + this.state.dentryId;
-        var staticLink = "http://" + Content.CSHOST + "/v0.1";
+        var idLink = "http://" + Content.HOST + "/v0.1/download/actions/direct?dentryId=" + this.state.dentryId;
+        var staticLink = "http://" + Content.HOST + "/v0.1";
         if (this.state.scope === 0) {
             idLink += "&session=" + Content.SESSION;
             staticLink += "/" + Content.SESSION;
