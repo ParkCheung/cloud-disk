@@ -6,6 +6,7 @@ export default class CsmngInfo extends React.Component {
 
     constructor(props) {
         super(props);
+        this.updateAt = 0;
         this.state = {
             text: "",
             errorType: "info",
@@ -14,10 +15,11 @@ export default class CsmngInfo extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.text) {
+        if (nextProps.updateAt > this.updateAt) {
+            this.updateAt = nextProps.updateAt;
             this.setState({
-                text: nextProps.text,
-                errorType: nextProps.errorType,
+                text: nextProps.message.error,
+                errorType: nextProps.message.errorType,
                 display: ""
             });
 

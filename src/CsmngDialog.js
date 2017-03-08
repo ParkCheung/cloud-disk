@@ -4,11 +4,51 @@
 import React from 'react';
 export default class CsmngDialog extends React.Component {
 
+    static doFun() {
+    };
 
+    static undoFun() {
+    };
+
+
+    constructor(props) {
+        super(props);
+        this.updateAt = 0;
+        this.state = {
+            display: "none"
+        }
+    }
 
     //关闭对话框
     closeDialog(confirmed) {
-        this.props.onCloseDialog(confirmed);
+        this.setState({
+            display: "none"
+        });
+        if (confirmed) {
+            if(typeof CsmngDialog.doFun === "function"){
+                CsmngDialog.doFun();
+            }
+        } else {
+            if(typeof CsmngDialog.undoFun === "function"){
+                CsmngDialog.undoFun();
+            }
+        }
+    }
+
+
+    static confirm(doFun, undoFun) {
+        CsmngDialog.doFun = doFun;
+        CsmngDialog.undoFun = undoFun;
+    }
+
+    //组件接收到新的props
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.updateAt > this.updateAt) {
+            this.updateAt = nextProps.updateAt;
+            this.setState({
+                display: ""
+            })
+        }
     }
 
     render() {
@@ -23,18 +63,22 @@ export default class CsmngDialog extends React.Component {
             delete: {
                 title: "删除",
                 content: "你确认要删除？",
-                extra: "删除后可以在回收站找回哦"
+                extra: ""
+            },
+            flush: {
+                title: "清空",
+                content: "你确认要清空回收站？",
+                extra: ""
             }
         };
 
-        if(info[this.props.operate]){
+        if (info[this.props.operate]) {
             defaultInfo = info[this.props.operate];
         }
 
-        var display = this.props.show ? "" : "none";
         return (
             <div className="fancybox-overlay fancybox-overlay-fixed"
-                 style={{width: "auto", height: "auto", display: display}}>
+                 style={{width: "auto", height: "auto", display: this.state.display, zIndex: "9999"}}>
                 <div className="my_dialog">
                     <div className="dialog">
                         <div className="dg_header">

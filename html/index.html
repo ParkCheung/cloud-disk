@@ -3,16 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>内容服务管理工具</title>
-    <!--<link href="../build/style.css" rel="stylesheet"/>-->
+    <!--<link href="build/style.css" rel="stylesheet"/>-->
     <link rel="stylesheet" type="text/css" media="screen" href="../build/css/portal.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="../build/css/jquery.fancybox.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../build/css/fancybox/jquery.fancybox.css">
 
-    <!--    <link rel="stylesheet" type="text/css" media="screen" href="../build/css/progress-bar.css">-->
     <link rel="stylesheet" href="http://sdp.nd/css/tipsy.css">
-    <link rel="stylesheet" href="../build/css/zTreeStyle.css" type="text/css">
     <link rel="stylesheet" type="text/css" media="screen" href="../build/css/content.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="../build/css/detail.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="../build/css/jquery.qtip.css">
     <link rel="stylesheet" type="text/css" media="screen" href="../build/css/font-awesome.min.css">
     <script src="../build/jquery-2.2.0.min.js"></script>
     <script src="../build/cs-object-sdk.min.js"></script>
@@ -22,9 +18,10 @@
 <div id="app"></div>
 <script src="http://cdn.bootcss.com/react/0.13.3/react.min.js"></script>
 <script>
+
     var ENV;
     var host = location.hostname;
-    switch(host){
+    switch (host) {
         case "csmng.dev.web.nd":
             ENV = "DEV";
             break;
@@ -44,7 +41,13 @@
 
     Content.setEnv(ENV);
 
-    var aQuery = window.location.href.split("?");//取得Get参数
+    var herf = window.location.href;
+
+    if (herf.lastIndexOf("#") === herf.length - 1) {
+        herf = herf.substring(0, herf.length - 1)
+    }
+    var aQuery = herf.split("?");//取得Get参数
+
     var aGET = [];
     if (aQuery.length > 1) {
         var aBuf = aQuery[1].split("&");
@@ -53,24 +56,19 @@
             aGET[aTmp[0]] = aTmp[1];
         }
     }
-
     var path = aGET.path;
-    if(!path){
+    if (!path) {
         alert("缺少path");
     }
-
     path = path.replace("%2F", "/");
-    if (path.lastIndexOf("#") === path.length - 1) {
-        path = path.substring(0, path.length - 1)
-    }
-
     Content.SERVICENAME = path.split("/")[1];
-    if(!aGET.session){
+    if (!aGET.session) {
         alert("缺少session");
     }
     Content.SESSION = aGET.session;
 </script>
-
+<script type="text/javascript" src="../build/jquery.zclip.min.js"></script>
 <script src="../build/bundle.js"></script>
+
 </body>
 </html>

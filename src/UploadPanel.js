@@ -10,8 +10,10 @@ export default class UploadPanel extends React.Component {
         this.preTime = 0;
         this.preLoaded = 0;
         this.uploadingNum = 0;
+        this.updateAt = 0;
         this.state = {
-            files: []
+            files: [],
+            display: "none"
         };
 
         //获取session
@@ -25,8 +27,9 @@ export default class UploadPanel extends React.Component {
         this.listenner = {
             onNotifySuccess: function () {
                 if (--this.uploadingNum === 0) {
-                    this.updateList();
+                    this.props.uploadSuccess(this.currentPath);
                 }
+
             }.bind(this),
 
             onNotifyFail: function (data) {
@@ -37,6 +40,9 @@ export default class UploadPanel extends React.Component {
                 var percent = Math.floor((progress.loaded / progress.total).toFixed(2) * 100);
                 $('#' + progress.file_hash + ' div[name="progress_bar"]').css("width", percent + "%");
                 $('#' + progress.file_hash + ' p').text(percent + "%");
+                if (percent === 100) {
+                    $('#upload_state_' + progress.file_hash).attr('src', "../build/img/complete.png");
+                }
 
                 if (this.preTime === 0) {
                     $('#' + progress.file_hash + "_speed" + ' div').html(0.00 + "KB/s");
@@ -60,13 +66,20 @@ export default class UploadPanel extends React.Component {
 
     //关闭面板操作并刷新列表
     closePanel() {
-        this.props.closeUploadPanel();
-        this.updateList();
+        this.setState({
+            display: "none"
+        });
     }
 
-    //上传文件成功 刷新列表
-    updateList() {
-        this.props.uploadSuccess(this.currentPath);
+    //组件接收到新的props
+    componentWillReceiveProps(nextProps) {
+        this.currentPath = nextProps.currentPath;
+        if (nextProps.updateAt > this.updateAt) {
+            this.updateAt = nextProps.updateAt;
+            this.setState({
+                display: ""
+            })
+        }
     }
 
     //选择文件后开始上传
@@ -86,17 +99,21 @@ export default class UploadPanel extends React.Component {
             var file = files[i];
             var remotePath = this.currentPath + "/" + (file.webkitRelativePath ? file.webkitRelativePath : file.name);
             this.uploadingNum++;
-            //TODO 获取公开私密属性
-            CSClient.upload(Content.SERVICENAME, file, remotePath, 0, this.listenner, null, this.cssession);
+            var scope = $("#scope_check")[0].checked ? 1 : 0;
+            CSClient.upload(Content.SERVICENAME, file, remotePath, scope, this.listenner, null, this.cssession);
         }
     }
 
     //点击上传文件获取上传文件夹
     handleClick() {
+        var input;
         if (this.props.type === "upload") {
-            React.findDOMNode(this.refs.file_select).click();
+            input = React.findDOMNode(this.refs.file_select);
+            input.removeAttribute('webkitdirectory');
+            input.removeAttribute('directory');
+            input.click();
         } else {
-            var input = React.findDOMNode(this.refs.upload_floder_chooser);
+            input = React.findDOMNode(this.refs.upload_floder_chooser);
             input.setAttribute('webkitdirectory', '');
             input.setAttribute('directory', '');
             input.click();
@@ -118,17 +135,16 @@ export default class UploadPanel extends React.Component {
         this.setState({
             files: filesList
         });
-        if( this.uploadingNum > 0){
+        if (this.uploadingNum > 0) {
             this.uploadingNum--;
         }
     }
 
     render() {
-        this.currentPath = this.props.currentPath;
-        var display = this.props.show ? "" : "none";
+
         return (
             <div className="fancybox-overlay fancybox-overlay-fixed" id="upload_div"
-                 style={{width: "auto", height: "auto", display: display}}>
+                 style={{width: "auto", height: "auto", display: this.state.display}}>
                 <div className="function_dialog upload_dialog">
                     <div className="dg_header">
                         <h3>上传</h3>

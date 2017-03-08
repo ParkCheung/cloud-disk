@@ -11,7 +11,7 @@ export default class DentryDetail extends React.Component {
         super(props);
         this.state = {
             mouseOver: false,
-            display:this.props.display
+            display: this.props.display
         }
     }
 
@@ -107,6 +107,7 @@ export default class DentryDetail extends React.Component {
             mouseOver: true
         })
     }
+
     //处理鼠标移除事件
     handleMouseLeave() {
         this.setState({
@@ -115,14 +116,14 @@ export default class DentryDetail extends React.Component {
     }
 
     //显示下载地址
-    showDownloadLink(item){
+    showDownloadLink(item) {
         React.render(<DownloadLinkDialog dentry={item}/>, document.getElementById('download_link_div'));
     }
 
     //下载文件
-    downloadFile(item){
+    downloadFile(item) {
         //文件 直接下载
-        var url = "http://" + Content.HOST + "/v0.1/download/actions/direct?path=" + encodeURIComponent(item.path)+"&attachment=true";
+        var url = "http://" + Content.HOST + "/v0.1/download/actions/direct?path=" + encodeURIComponent(item.path) + "&attachment=true";
         if (item.scope === 0) {
             url += "&session=" + Content.SESSION;
         }
@@ -130,8 +131,8 @@ export default class DentryDetail extends React.Component {
     }
 
     //删除文件
-    deleteDentry(){
-       this.props.deleteDentry();
+    deleteDentry() {
+        this.props.deleteDentry();
     }
 
     //处理鼠标移除事件
@@ -161,30 +162,33 @@ export default class DentryDetail extends React.Component {
                                                onClick={this.handleClick.bind(this, "checkbox")}/>
                 </td>
                 <td className="list_td">
-                    <div className="list_dentry_name"><img className="dentry_icon"
-                                                           src={iconAddr}/>
-                    </div>
-                    <div className="list_link"/>
-                    {
-                        nodeType === "input" ?
-                            <input className="new_dentry_name" type="text" defaultValue={item.name} id={item.dentry_id}
-                                   maxLength="128" required="required" ref="newName"
-                                   onBlur={this.handleBlur.bind(this)}/> :
-                            <label className="dentry_name" onClick={this.handleClick.bind(this, "dentry")}
-                                   id={item.dentry_id}>{item.name}</label>
-                    }
+                    <div onClick={this.handleClick.bind(this, "dentry")}>
+                        <div className="list_dentry_name"><img className="dentry_icon"
+                                                               src={iconAddr}/>
+                        </div>
+                        <div className="list_link"/>
+                        {
+                            nodeType === "input" ?
+                                <input className="new_dentry_name" type="text" defaultValue={item.name}
+                                       id={item.dentry_id}
+                                       maxLength="128" required="required" ref="newName"
+                                       onBlur={this.handleBlur.bind(this)}/> :
+                                <label className="dentry_name"
+                                       id={item.dentry_id}>{item.name}</label>
+                        }
+                    </div >
                     <div className="list_link"/>
                     <a className="btn-single-delete" style={{display: this.state.mouseOver ? "" : "none"}}><img
                         src="../build/img/recycle.png" onClick={this.deleteDentry.bind(this)}/></a>
                     <a className="btn-single-download"
                        style={{display: this.state.mouseOver && item.type !== 0 ? "" : "none"}}><img
                         src="../build/img/download2.png" onClick={this.downloadFile.bind(this,item)}/></a>
-                    <a className="btn-download-link" style={{display: this.state.mouseOver && item.type !== 0 ? "" : "none"}} onClick={this.showDownloadLink.bind(this,item)}><img
+                    <a className="btn-download-link"
+                       style={{display: this.state.mouseOver && item.type !== 0 ? "" : "none"}}
+                       onClick={this.showDownloadLink.bind(this,item)}><img
                         src="../build/img/link.png"/></a>
 
                 </td>
-                <td className="list_td"><input type="checkbox" checked={item.scope == 1}
-                                               className="checkbox-scope"/></td>
                 <td className="list_td">{size}</td>
                 <td className="list_td">{updateAt}</td>
             </tr>

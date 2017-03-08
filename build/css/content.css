@@ -18,6 +18,13 @@
     overflow: hidden;
 }
 
+.upload_show {
+    width: 100%;
+    height: 85%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
 .com_toolbar {
     height: 40px;
     background-color: #f2f2f2;
@@ -653,3 +660,8 @@ input {
     color: #2A291B;
 }
 
+.list_title{
+    font: 14px "Microsoft YaHei", STXihei, sans-serif;
+    background-color: #dbe6f1;
+    font-weight: bolder;
+}

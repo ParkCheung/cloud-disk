@@ -4,7 +4,6 @@
 import React from 'react';
 export default class DownloadLinkDialog extends React.Component {
 
-
     constructor(props) {
         super(props);
         this.state = {
@@ -26,11 +25,34 @@ export default class DownloadLinkDialog extends React.Component {
         });
     }
 
+    componentDidMount(){
+        $(".copy").zclip({
+            path: "../build/ZeroClipboard.swf",
+            copy: function(){
+                if(this.id === "btn_link"){
+                    return $(".idLink").text();
+                }else {
+                    return $(".staticLink").text();
+                }
+            },
+            beforeCopy:function(){/* 按住鼠标时的操作 */
+                $(this).css("color","grey");
+            },
+            afterCopy:function(){/* 复制成功后的操作 */
+                // var $copysuc = $("<div class='copy-tips'><div class='copy-tips-wrap'>☺ 复制成功</div></div>");
+                // $("body").find(".copy-tips").remove().end().append($copysuc);
+                // $(".copy-tips").fadeOut(3000);
+            }
+        });
+    }
+
     //关闭显示窗口
     handleClick(){
         this.setState({
             display:"none"
-        })
+        });
+        //修改复制链接的样式
+        $(".copy").css("color","white");
     }
 
 
@@ -61,12 +83,12 @@ export default class DownloadLinkDialog extends React.Component {
                                                                                       className="link idLink">{idLink}</a>
                                 </p><a
                                     id="btn_link"
-                                    className="btn1 btn_link">复制链接</a>
+                                    className="btn1 btn_link copy">复制链接</a>
                                 </div>
                                 <div className="link_div"><p><span>静态路径下载地址：</span><a href={staticLink}
                                                                                       className="link staticLink">{staticLink}</a>
                                 </p><a id="btn_static"
-                                       className="btn1 btn_link">复制链接</a>
+                                       className="btn1 btn_link copy">复制链接</a>
                                 </div>
                             </div>
                         </div>

@@ -10,73 +10,73 @@ import CsmngFooter from './CsmngFooter.js';
 import UploadPanel from './UploadPanel.js';
 import CsmngDialog from './CsmngDialog.js';
 import CsmngInfo from './CsmngInfo.js';
+import CsmngRecycle from './CsmngRecycle.js';
 
 class App extends React.Component {
     constructor(props) {
         super(props);
-        this.confirmed = false;
+        this.message = "";
+        this.selectItems = [];
+        this.currentPath = "/" + Content.SERVICENAME;
+        this.operate = "";
         this.state = {
-            currentPath: "/" + Content.SERVICENAME,
-            selectItems: [],
-            showUploadPanel: false,
-            showDialog: false,
-            operate: "",
-            updateAt: 0,
-            error: "",
-            errorType: ""
+            showUploadPanel: 0,            //是否显示文件上传界面
+            showDialog: 0,                 //是否显示确认对话框
+            showRecycle: 0,                //是否显示回收站界面
+            showInfo: 0,                   //是否显示提示信息
+            updateList: 0,                 //是否更新列表界面
+            updateToolbar: 0,              //是否更新工具栏
+            updateNavigation: 0            //是否更新导航栏
         }
     }
 
+    //删除dentry
     deleteDentry(items) {
-
+        this.operate = "delete";
         this.setState({
-            selectItems : items
+            selectItems: items,
+            showDialog: new Date().getTime()
         });
-        if (!this.confirmed) {
-            //弹出确认窗口
-            this.setState({
-                showDialog: true,
-                operate: "delete"
-            });
-        } else {
-            this.confirmed = false;
+        var _self = this;
+        CsmngDialog.confirm(function () {
             var deletePaths = [];
             for (var i = 0; i < items.length; i++) {
-                deletePaths.push(items[i].path);
+                if(items[i].path){
+                    deletePaths.push(items[i].path);
+                }
             }
             var body = {
-                parent_path: this.state.currentPath,
+                parent_path: _self.currentPath,
                 paths: deletePaths
             };
             var url = "http://" + Content.HOST + "/v0.1/dentries/actions/delete?session=" + Content.SESSION + "&fromPath=true";
-            var _self = this;
             CSHttpClient.doPatchRequest(url, JSON.stringify(body), null, function () {
                 _self.setState({
-                    updateAt: new Date().getTime(),
+                    updateList: new Date().getTime()
                 });
             }, function () {
-                _self.setState({
+                _self.onShowErrorMsg({
                     error: "删除文件失败！",
                     errorType: "error"
                 });
             });
-        }
+        });
     }
 
     //监控工具栏点击事件
     onOperateChange(operate) {
+        this.operate = operate;
         var url;
         var _self = this;
         switch (operate) {
             case "upload":
             case "upload_folder":
                 this.setState({
-                    showUploadPanel: true,
-                    operate: operate
+                    showUploadPanel: new Date().getTime()
                 });
                 break;
             case "download":
-                var dentry = this.state.selectItems[0];
+                var dentry = this.selectItems[0];
                 //文件 直接下载
                 url = "http://" + Content.HOST + "/v0.1/download?path=" + encodeURIComponent(dentry.path);
                 if (dentry.scope === 0) {
@@ -85,7 +85,7 @@ class App extends React.Component {
                 window.open(url);
                 break;
             case "delete":
-                this.deleteDentry(this.state.selectItems);
+                this.deleteDentry(this.selectItems);
                 break;
             case "create_folder":
                 document.getElementById("create_folder_dentry").style.display = "";
@@ -96,92 +96,62 @@ class App extends React.Component {
             case "rename":
                 //重命名 需要将labe转换为input
                 this.setState({
-                    updateAt: -1
+                    //不刷新列表，只刷新单个列表项
+                    updateList: -1
                 }, function () {
-                    var item = _self.state.selectItems[0];
+                    var item = _self.selectItems[0];
                     var id = "#" + item.dentry_id;
                     $(id).focus();
                     document.getElementById(item.dentry_id).setSelectionRange(0, item.name.lastIndexOf("."));
                 });
                 break;
+            case "recycle":
+                this.setState({
+                    showRecycle: new Date().getTime()
+                });
+                break;
         }
-    }
-
-    onCreateDentry(name) {
-        var body = {
-            path: this.state.currentPath,
-            name: name
-        };
-        var _self = this;
-        var url = "http://" + Content.HOST + "/v0.1/dentries?session=" + Content.SESSION;
-        CSHttpClient.doPostRequest(url, JSON.stringify(body), {}, function () {
-            document.getElementById("create_folder_dentry").style.display = "none";
-            document.getElementById("new_dentry_name").value = "新建文件夹";
-            _self.setState({
-                updateAt: new Date().getTime()
-            });
-
-        }, function () {
-            _self.setState({
-                error: "创建目录失败！",
-                errorType: "error",
-            });
-        });
-    }
-
-    //关闭上传面板
-    closeUploadPanel() {
-        this.setState({
-            showUploadPanel: false
-        });
     }
 
     //列表路径变化
     onChangePath(path) {
+        this.currentPath = path;
         this.setState({
-            currentPath: path
+            updateList: new Date().getTime(),
+            updateNavigation: new Date().getTime()
         });
     }
 
     //列表选项变化
     onChangeSelect(selectedItems) {
+        this.selectItems = selectedItems;
         this.setState({
-            selectItems: selectedItems
+            updateToolbar: new Date().getTime(),
+            //防止重命名会显示文本框
+            updateList: -2
         });
     }
 
     //上传成功 刷新列表
     onUploadSuccess() {
         this.setState({
-            updateAt: new Date().getTime()
+            updateList: new Date().getTime()
         });
     }
 
-    //已操作完对话框
-    onCloseDialog(confirmed) {
-        this.confirmed = confirmed;
+    //显示对话框
+    onShowDialog(operate) {
+        this.operate = operate;
         this.setState({
-            showDialog: false
+            showDialog: new Date().getTime()
         });
-        //点击确认
-        if (confirmed) {
-            this.onOperateChange(this.state.operate);
-        }
     }
 
     //显示错误
     onShowErrorMsg(msg) {
+        this.message = msg;
         this.setState({
-            error: msg.error,
-            errorType: msg.errorType,
-        });
-    }
-
-    //清除error信息
-    onClearError() {
-        this.setState({
-            error: "",
-            errorType: ""
+            showInfo: new Date().getTime()
         });
     }
 
@@ -189,27 +159,42 @@ class App extends React.Component {
         return (
             <div>
                 <CsmngHeader/>
-                <CsmngNavigation currentPath={this.state.currentPath}
-                                 onClick={this.onChangePath.bind(this)}/>
-                <CsmngToolBar selectItems={this.state.selectItems}
-                              onOperateChange={this.onOperateChange.bind(this)}/>
-                <UploadPanel show={this.state.showUploadPanel}
-                             type={this.state.operate}
-                             closeUploadPanel={this.closeUploadPanel.bind(this)}
-                             currentPath={this.state.currentPath}
-                             uploadSuccess={this.onUploadSuccess.bind(this)}/>
-                <CsmngDialog show={this.state.showDialog} operate={this.state.operate}
-                             onCloseDialog={this.onCloseDialog.bind(this)}/>
-                <CsmngInfo text={this.state.error} errorType={this.state.errorType}
-                           onClearError={this.onClearError.bind(this)}/>
+                <CsmngNavigation
+                    updateAt={this.state.updateNavigation}
+                    currentPath={this.currentPath}
+                    onClick={this.onChangePath.bind(this)}
+                />
+                <CsmngToolBar
+                    updateAt={this.state.updateToolbar}
+                    selectItems={this.selectItems}
+                    onOperateChange={this.onOperateChange.bind(this)}
+                />
+                <UploadPanel
+                    updateAt={this.state.showUploadPanel}
+                    type={this.operate}
+                    currentPath={this.currentPath}
+                    uploadSuccess={this.onUploadSuccess.bind(this)}
+                />
+                <CsmngDialog
+                    updateAt={this.state.showDialog}
+                    operate={this.operate}
+                />
+                <CsmngInfo
+                    updateAt={this.state.showInfo}
+                    message={this.message}
+                />
                 <DentryListPanel
-                    currentPath={this.state.currentPath}
+                    updateAt={this.state.updateList}
+                    currentPath={this.currentPath}
                     onCurrentPathChange={this.onChangePath.bind(this)}
                     onDeleteDentry={this.deleteDentry.bind(this)}
                     onSelectChange={this.onChangeSelect.bind(this)}
-                    onCreateDentry={this.onCreateDentry.bind(this)}
                     onShowErrorMsg={this.onShowErrorMsg.bind(this)}
-                    updateAt={this.state.updateAt}/>
+                />
+                <CsmngRecycle
+                    updateAt={this.state.showRecycle}
+                    showDialog={this.onShowDialog.bind(this)}
+                    onShowErrorMsg={this.onShowErrorMsg.bind(this)}/>
                 <CsmngFooter/>
             </div>
         )

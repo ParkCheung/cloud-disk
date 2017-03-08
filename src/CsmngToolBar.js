@@ -5,10 +5,28 @@ import React from 'react';
 export default class CsmngToolBar extends React.Component {
 
 
+    constructor(props){
+        super(props);
+        this.updateAt = 0;
+        this.state={
+            selectItems:[]
+        }
+    }
+
+
     handleClick(operate){
         this.props.onOperateChange(operate);
     }
 
+    //组件接收到新的props
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.updateAt > this.updateAt) {
+            this.updateAt = nextProps.updateAt;
+            this.setState({
+                selectItems:nextProps.selectItems
+            })
+        }
+    }
 
     render() {
 
@@ -20,19 +38,19 @@ export default class CsmngToolBar extends React.Component {
             {"id": "move", "name": "移动", "className": "icon", "available": false},
             {"id": "delete", "name": "删除", "className": "icon", "available": false},
             {"id": "rename", "name": "重命名", "className": "icon", "available": false},
-            {"id": "recycle", "name": "回收站", "className": "icon", "available": true}
+            {"id": "recycle", "name": "回收站", "className": "icon", "available": false}
         ];
 
         //不支持批量的操作项
-        if (this.props.selectItems) {
+        if (this.state.selectItems) {
             //只支持单个操作文件
-            if(this.props.selectItems.length === 1 && this.props.selectItems[0].type !==0){
+            if(this.state.selectItems.length === 1 && this.state.selectItems[0].type !==0){
                 items[2].available = true;
                 items[6].available = true;
             }
 
-            if (this.props.selectItems.length >= 1){
-                items[4].available = true;
+            if (this.state.selectItems.length >= 1){
+                //items[4].available = true;
                 items[5].available = true;
             }
         }
